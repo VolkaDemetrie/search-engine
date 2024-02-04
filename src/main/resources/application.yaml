@@ -1,0 +1,9 @@
+server:
+  port: 8090
+  servlet:
+    encoding:
+      charset: UTF-8
+      force-request: true
+      force-response: true
+    context-path: "/api/v1"
+
