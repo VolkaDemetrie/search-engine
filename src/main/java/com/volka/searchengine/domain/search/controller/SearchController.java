@@ -1,6 +1,6 @@
 package com.volka.searchengine.domain.search.controller;
 
-import com.volka.searchengine.dto.Search;
+import com.volka.searchengine.domain.search.entity.Search;
 import com.volka.searchengine.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

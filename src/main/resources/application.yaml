@@ -8,5 +8,7 @@ server:
     context-path: "/api/v1"
 
 engine:
-  index-file-path: "/path" #서버에 올릴 디렉토리 위치 정해지면 수정
+  file:
+    index-path: "/path" #서버에 올릴 디렉토리 위치 정해지면 수정
+
 

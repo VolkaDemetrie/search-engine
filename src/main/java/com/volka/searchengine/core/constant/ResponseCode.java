@@ -12,6 +12,7 @@ public enum ResponseCode {
 
     SUCCESS("SC0000", "성공")
     ,FAIL("FL0000", "실패")
+    ,INIT_FAIL("FL0001", "초기화 실패")
     ;
 
     private final String code;

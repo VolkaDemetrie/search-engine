@@ -1,6 +1,6 @@
 package com.volka.searchengine.domain.search.service;
 
-import com.volka.searchengine.dto.Search;
+import com.volka.searchengine.domain.search.entity.Search;
 
 import java.util.List;
 
