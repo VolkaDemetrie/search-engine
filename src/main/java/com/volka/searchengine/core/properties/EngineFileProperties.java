@@ -8,5 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties("engine.file")
 public class EngineFileProperties {
-    private String indexPath;
+    private String idxDir; //색인파일 위치
+    private String originDir; //원천 데이터 위치
 }

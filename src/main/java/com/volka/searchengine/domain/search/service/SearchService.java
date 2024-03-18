@@ -1,6 +1,6 @@
 package com.volka.searchengine.domain.search.service;
 
-import com.volka.searchengine.domain.search.entity.Search;
+import com.volka.searchengine.core.engine.model.DocumentModel;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface SearchService {
      * @param word
      * @return
      */
-    List<Search> searchWord(String word);
+    List<DocumentModel> searchWord(String orgId, String word);
 }

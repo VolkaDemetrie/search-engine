@@ -1,7 +1,6 @@
 package com.volka.searchengine.core.dto;
 
 import com.volka.searchengine.core.constant.ResponseCode;
-import com.volka.searchengine.core.exception.ServiceException;
 import lombok.Getter;
 
 /**

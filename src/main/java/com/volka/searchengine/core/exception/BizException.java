@@ -9,18 +9,28 @@ import lombok.Getter;
  * @author volka
  */
 @Getter
-public class ServiceException extends RuntimeException {
+public class BizException extends RuntimeException {
     private String code;
     private String msg;
 
-    public ServiceException(ResponseCode responseCode) {
+    public BizException(ResponseCode responseCode) {
         this.code = responseCode.getCode();
         this.msg = responseCode.getMsg();
     }
 
-    public ServiceException(ResponseCode responseCode, Throwable e) {
+    public BizException(ResponseCode responseCode, Throwable e) {
         super(e);
         this.code = responseCode.getCode();
         this.msg = responseCode.getMsg();
+    }
+
+
+    public BizException(String errCode) {
+        this.code = errCode;
+    }
+
+    public BizException(String errCode, Throwable t) {
+        super(t);
+        this.code = errCode;
     }
 }

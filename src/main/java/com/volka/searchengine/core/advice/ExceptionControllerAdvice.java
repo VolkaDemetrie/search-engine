@@ -2,8 +2,8 @@ package com.volka.searchengine.core.advice;
 
 import com.volka.searchengine.core.constant.ResponseCode;
 import com.volka.searchengine.core.dto.ResponseDTO;
+import com.volka.searchengine.core.exception.BizException;
 import com.volka.searchengine.core.exception.SearchException;
-import com.volka.searchengine.core.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(value = {SearchException.class, ServiceException.class, Exception.class})
+    @ExceptionHandler(value = {SearchException.class, BizException.class, Exception.class})
     public ResponseDTO<?> exceptionHandler(Exception e) {
         try {
-            log.error("ERROR MSG :: {}", e.getLocalizedMessage());
-            if (e.getCause() != null) log.error("ERROR CAUSE :: {}", e.getCause().getMessage());
+            log.error("###[ERROR] MSG :: {}", e.getLocalizedMessage());
+            if (e.getCause() != null) log.error("###[ERROR] CAUSE :: {}", e.getCause().getMessage());
 
-            if (e instanceof ServiceException) {
+            if (e instanceof BizException) {
                 //TODO : i18n 에러 메시지 적용
                 return ResponseDTO.response(ResponseCode.FAIL);
             } else if (e instanceof SearchException) {

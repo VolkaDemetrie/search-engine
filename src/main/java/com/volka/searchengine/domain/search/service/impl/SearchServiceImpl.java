@@ -1,15 +1,13 @@
 package com.volka.searchengine.domain.search.service.impl;
 
-import com.volka.searchengine.core.exception.ServiceException;
-import com.volka.searchengine.domain.search.entity.Search;
+import com.volka.searchengine.core.engine.SearchEngine;
+import com.volka.searchengine.core.engine.model.DocumentModel;
+import com.volka.searchengine.core.exception.BizException;
 import com.volka.searchengine.domain.search.service.SearchService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -18,22 +16,21 @@ import java.util.List;
  * @author volka
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class SearchServiceImpl implements SearchService {
 
-    @PersistenceContext
-    private EntityManager em;
 
-    @Transactional
+    private final SearchEngine searchEngine;
+
     @Override
-    public List<Search> searchWord(String word) {
+    public List<DocumentModel> searchWord(String orgId, String word) {
         try {
-            Search search = new Search();
-            search
-        } catch (ServiceException e) {
-
+            return null;
+        } catch (BizException e) {
+            return null;
         } catch (Exception e) {
-
+            return null;
         }
     }
 }

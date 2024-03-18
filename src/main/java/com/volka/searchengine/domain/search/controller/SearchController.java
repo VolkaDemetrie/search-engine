@@ -1,6 +1,6 @@
 package com.volka.searchengine.domain.search.controller;
 
-import com.volka.searchengine.domain.search.entity.Search;
+import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -18,16 +18,17 @@ import java.util.List;
  */
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/search")
+@RequestMapping("/api/v1/search")
 @RestController
 public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping("/{searchWord}")
-    public List<Search> searchWord(
-            @PathVariable(value = "word") String word
+    @GetMapping("/acit/{orgId}/{word}")
+    public List<DocumentModel> searchWord(
+            @PathVariable(value = "orgId") String orgId
+            ,@PathVariable(value = "word") String word
     ) {
-        return searchService.searchWord(word);
+        return searchService.searchWord(orgId, word);
     }
 }

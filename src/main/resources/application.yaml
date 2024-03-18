@@ -1,14 +1,26 @@
 server:
-  port: 8090
+  port: 8099
   servlet:
     encoding:
       charset: UTF-8
       force-request: true
       force-response: true
-    context-path: "/api/v1"
+  http2:
+    enabled: true
+#  undertow:
+#    decode-url: true
+#    threads:
+#      io: 8 #4core
+#      worker: 100
+#    url-charset: UTF-8
+#    always-set-keep-alive: true
+spring:
+#  redis:
+  profiles:
+    active: local
+
 
 engine:
   file:
-    index-path: "/path" #서버에 올릴 디렉토리 위치 정해지면 수정
-
-
+    idx-dir: "/home/volka/search_engine/idx"
+    origin-dir: "/home/volka/search_engine/org"
