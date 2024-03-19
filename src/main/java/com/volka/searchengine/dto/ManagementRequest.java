@@ -1,5 +1,6 @@
 package com.volka.searchengine.dto;
 
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import lombok.Data;
 import org.springframework.lang.NonNull;
 
@@ -11,18 +12,5 @@ import java.util.List;
  * @author volka
  */
 public interface ManagementRequest {
-
-
-    /**
-     * 계정과목 초기화 요청
-     */
-    @Data
-    class Acit {
-
-        private String orgId;
-
-        @NonNull
-        private List<Acit> acitModelList;
-    }
 
 }

@@ -1,13 +1,11 @@
 package com.volka.searchengine.domain.search.controller;
 
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,11 +22,12 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping("/acit/{orgId}/{word}")
+    @GetMapping("/{domain}/{orgId}")
     public List<DocumentModel> searchWord(
-            @PathVariable(value = "orgId") String orgId
-            ,@PathVariable(value = "word") String word
+            @PathVariable(value = "domain") SEARCH_DOMAIN domain
+            ,@PathVariable(value = "orgId") String orgId
+            ,@RequestParam(value = "word") String word
     ) {
-        return searchService.searchWord(orgId, word);
+        return searchService.searchWord(domain, orgId, word);
     }
 }

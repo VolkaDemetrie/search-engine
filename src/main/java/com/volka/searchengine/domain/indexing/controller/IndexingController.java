@@ -1,28 +1,35 @@
 package com.volka.searchengine.domain.indexing.controller;
 
 import com.volka.searchengine.core.constant.ResponseCode;
+import com.volka.searchengine.core.dto.ResponseDTO;
 import com.volka.searchengine.domain.indexing.service.IndexService;
+import com.volka.searchengine.dto.IndexingRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
- * 검색 컨트롤러
+ * 색인 컨트롤러
  *
  * @author volka
  */
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/index")
+@RequestMapping("/api/v1/index")
 @RestController
 public class IndexingController {
 
     private final IndexService indexService;
 
-    @PatchMapping
-    public ResponseCode indexing(String word) {
-        return indexService.indexing(word);
+    @PostMapping
+    public ResponseDTO<ResponseCode> indexing(@Valid @RequestBody IndexingRequest.Save param) {
+        return ResponseDTO.response(indexService.indexing(param));
+    }
+
+    @PostMapping("/init")
+    public ResponseDTO<ResponseCode> initialize(@Valid @RequestBody IndexingRequest.Init param) {
+        return ResponseDTO.response(indexService.initialize(param));
     }
 }

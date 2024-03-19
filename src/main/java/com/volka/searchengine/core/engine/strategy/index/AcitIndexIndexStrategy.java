@@ -32,11 +32,11 @@ public class AcitIndexIndexStrategy implements DomainIndexStrategy {
 
             doc.add(new StringField("acitCd", acit.getAcitCd(), Field.Store.YES));
             doc.add(new StringField("acitDivCd", acit.getAcitDivCd(), Field.Store.YES));
-            doc.add(new StringField("aictClsfCd", acit.getAictClsfCd(), Field.Store.YES));
+            doc.add(new StringField("acitClsfCd", acit.getAcitClsfCd(), Field.Store.YES));
             doc.add(new TextField("acitNm", acit.getAcitNm(), Field.Store.YES));
             doc.add(new StringField("acitTyp", acit.getAcitTyp(), Field.Store.YES));
             doc.add(new StringField("useYn", acit.getUseYn(), Field.Store.YES));
-            doc.add(new StringField("dbtCrdtDiv", acit.getDbtCrdtDiv(), Field.Store.YES));
+//            doc.add(new StringField("dbtCrdtDiv", acit.getDbtCrdtDiv(), Field.Store.YES));
 
             this.indexWriter.addDocument(doc);
         }

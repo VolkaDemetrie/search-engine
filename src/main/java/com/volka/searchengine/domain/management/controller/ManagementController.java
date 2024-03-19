@@ -15,24 +15,4 @@ public class ManagementController {
 
     private final ManagementService managementService;
 
-    /**
-     * 기관별 계정과목 초기화
-     * @param param
-     * @return
-     */
-    @PostMapping("/acit/init")
-    public ResponseCode initAcit(@RequestBody ManagementRequest.Acit param) {
-        return managementService.initAcit(param);
-    }
-
-    @PatchMapping("/acit")
-    public ResponseCode addAcit(@RequestBody ManagementRequest.Acit param) {
-        return managementService.addAcit(param);
-    }
-
-    @PatchMapping("/acit/del")
-    public ResponseCode delAcit(@RequestBody ManagementRequest.Acit param) {
-        return managementService.delAcit(param);
-    }
-
 }

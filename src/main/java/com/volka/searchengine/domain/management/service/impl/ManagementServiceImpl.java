@@ -9,19 +9,4 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class ManagementServiceImpl implements ManagementService {
-
-    @Override
-    public ResponseCode initAcit(ManagementRequest.Acit param) {
-        return null;
-    }
-
-    @Override
-    public ResponseCode addAcit(ManagementRequest.Acit param) {
-        return null;
-    }
-
-    @Override
-    public ResponseCode delAcit(ManagementRequest.Acit param) {
-        return null;
-    }
 }

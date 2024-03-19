@@ -1,5 +1,6 @@
 package com.volka.searchengine.domain.search.service;
 
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.model.DocumentModel;
 
 import java.util.List;
@@ -13,8 +14,10 @@ public interface SearchService {
 
     /**
      * 단어 검색
+     *
+     * @param domain
      * @param word
      * @return
      */
-    List<DocumentModel> searchWord(String orgId, String word);
+    List<DocumentModel> searchWord(SEARCH_DOMAIN domain, String orgId, String word);
 }

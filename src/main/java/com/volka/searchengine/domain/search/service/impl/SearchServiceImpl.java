@@ -1,5 +1,7 @@
 package com.volka.searchengine.domain.search.service.impl;
 
+import com.volka.searchengine.core.constant.ResponseCode;
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.SearchEngine;
 import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.core.exception.BizException;
@@ -20,17 +22,18 @@ import java.util.List;
 @Service
 public class SearchServiceImpl implements SearchService {
 
-
-    private final SearchEngine searchEngine;
+    private final SearchEngine engine;
 
     @Override
-    public List<DocumentModel> searchWord(String orgId, String word) {
+    public List<DocumentModel> searchWord(SEARCH_DOMAIN domain, String orgId, String word) {
         try {
-            return null;
+            return engine.search(orgId, word, domain);
         } catch (BizException e) {
-            return null;
+            log.error("[EXCEPTION] searchWord() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
         } catch (Exception e) {
-            return null;
+            log.error("[EXCEPTION] searchWord() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
         }
     }
 }

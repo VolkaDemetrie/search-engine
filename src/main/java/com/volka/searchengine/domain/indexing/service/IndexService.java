@@ -1,6 +1,7 @@
 package com.volka.searchengine.domain.indexing.service;
 
 import com.volka.searchengine.core.constant.ResponseCode;
+import com.volka.searchengine.dto.IndexingRequest;
 
 /**
  * 검색 서비스 인터페이스
@@ -11,8 +12,10 @@ public interface IndexService {
 
     /**
      * 단어 검색
-     * @param word
+     * @param param
      * @return
      */
-    ResponseCode indexing(String word);
+    ResponseCode indexing(IndexingRequest.Save param);
+
+    ResponseCode initialize(IndexingRequest.Init param);
 }

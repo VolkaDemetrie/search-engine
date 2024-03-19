@@ -7,13 +7,13 @@ server:
       force-response: true
   http2:
     enabled: true
-#  undertow:
-#    decode-url: true
-#    threads:
-#      io: 8 #4core
-#      worker: 100
-#    url-charset: UTF-8
-#    always-set-keep-alive: true
+  undertow:
+    decode-url: true
+    threads:
+      io: 8 #4core
+      worker: 100
+    url-charset: UTF-8
+    always-set-keep-alive: true
 spring:
 #  redis:
   profiles:
