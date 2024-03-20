@@ -4,10 +4,7 @@ import com.volka.searchengine.core.engine.model.Acit;
 import com.volka.searchengine.core.exception.BizException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 
 import java.util.List;
@@ -15,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Getter
-public class AcitIndexIndexStrategy implements DomainIndexStrategy {
+public class AcitIndexIndexStrategy extends IndexStrategy {
 
     public AcitIndexIndexStrategy(List<Acit> acitList, IndexWriter indexWriter) {
         this.acitList = acitList;
@@ -30,9 +27,13 @@ public class AcitIndexIndexStrategy implements DomainIndexStrategy {
         for (Acit acit : this.acitList) {
             Document doc = new Document();
 
-            doc.add(new StringField("acitCd", acit.getAcitCd(), Field.Store.YES));
+//            String[] acitCdArr = extractJamo(acit.getAcitCd());
+//            doc.add(new SortedSetDocValuesField("acitCd", new BytesRef(acit.getAcitCd())));
+            doc.add(new TextField("acitCd", acit.getAcitCd(), Field.Store.YES));
+//            doc.add(new Field("acitCd", acit.getAcitCd(), Field.Store.YES));
             doc.add(new StringField("acitDivCd", acit.getAcitDivCd(), Field.Store.YES));
             doc.add(new StringField("acitClsfCd", acit.getAcitClsfCd(), Field.Store.YES));
+//            doc.add(new SortedSetDocValuesField("acitNm", new BytesRef(acit.getAcitNm())));
             doc.add(new TextField("acitNm", acit.getAcitNm(), Field.Store.YES));
             doc.add(new StringField("acitTyp", acit.getAcitTyp(), Field.Store.YES));
             doc.add(new StringField("useYn", acit.getUseYn(), Field.Store.YES));

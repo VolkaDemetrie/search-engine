@@ -15,21 +15,23 @@ import com.volka.searchengine.core.properties.EngineProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.ko.KoreanAnalyzer;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.*;
+import org.apache.lucene.search.*;
+import org.apache.lucene.search.similarities.Normalization;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.BytesRef;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -83,14 +85,17 @@ public class SearchEngine {
     @SuppressWarnings(value = "unchecked")
     public <T extends DocumentModel> void indexing(String orgId, List<T> modelList) throws IOException {
 
+        File orgIdxDir = null;
         Directory indexDir = null;
         IndexWriter writer = null;
 
         try {
+
+
             T firstModel = modelList.get(0);
             SEARCH_DOMAIN domain = firstModel.getDomain();
 
-            File orgIdxDir = generateIdxDirByOrgId(orgId, domain);
+            orgIdxDir = generateIdxDirByOrgId(orgId, domain);
             indexDir = NIOFSDirectory.open(orgIdxDir.toPath());
             writer = new IndexWriter(indexDir, new IndexWriterConfig(koreanAnalyzer));
 
@@ -118,6 +123,8 @@ public class SearchEngine {
 
     }
 
+
+
     public List<DocumentModel> search(String orgId, String word, SEARCH_DOMAIN domain) throws BizException, Exception {
 
         File idxDir = generateIdxDirByOrgId(orgId, domain);
@@ -125,12 +132,14 @@ public class SearchEngine {
         try (
                 IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(idxDir.toPath()));
         ) {
-
             IndexSearcher searcher = new IndexSearcher(reader);
+
             BooleanQuery query = termStrategyContext.createQuery(word, domain);
 
             TopDocs docs = searcher.search(query, hitPerPage);
             ScoreDoc[] hitArr = docs.scoreDocs;
+
+            log.info("TopDocs total hits :: {}", docs.totalHits);
 
             return ResponseConverter.convert(searcher, hitArr, domain);
 

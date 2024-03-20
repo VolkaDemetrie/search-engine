@@ -15,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Getter
-public class TrdpIndexIndexStrategy implements DomainIndexStrategy {
+public class TrdpIndexIndexStrategy extends IndexStrategy {
 
     public TrdpIndexIndexStrategy(List<Trdp> trdpList, IndexWriter indexWriter) {
         this.trdpList = trdpList;

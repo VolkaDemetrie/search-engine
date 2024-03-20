@@ -30,7 +30,7 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation 'org.apache.lucene:lucene-core:7.4.0'
-    implementation 'org.apache.lucene:lucene-analyzers-nori:8.11.2'
+    implementation 'org.apache.lucene:lucene-analyzers-nori:7.4.0'
     implementation 'org.apache.lucene:lucene-queryparser:7.4.0'
     implementation 'org.apache.lucene:lucene-memory:7.4.0'
     implementation 'org.apache.lucene:lucene-join:7.4.0'

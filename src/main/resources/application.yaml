@@ -11,7 +11,7 @@ server:
     decode-url: true
     threads:
       io: 8 #4core
-      worker: 100
+      worker: 40 #max-threads
     url-charset: UTF-8
     always-set-keep-alive: true
 spring:

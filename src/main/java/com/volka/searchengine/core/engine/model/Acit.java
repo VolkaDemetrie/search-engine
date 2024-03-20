@@ -49,7 +49,6 @@ public class Acit implements DocumentModel {
         this.acitNm = document.get("acitNm");
         this.acitTyp = document.get("acitTyp");
         this.useYn = document.get("useYn");
-//        this.dbtCrdtDiv = document.get("dbtCrdtDiv");
     }
 
     public static Acit of(Document document) {
