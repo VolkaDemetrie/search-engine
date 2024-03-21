@@ -3,6 +3,7 @@ package com.volka.searchengine.core.engine.strategy;
 
 import com.volka.searchengine.core.engine.strategy.index.IndexStrategy;
 import com.volka.searchengine.core.exception.BizException;
+import org.apache.lucene.index.IndexWriter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Component;
  *
  * @author volka
  */
-@Component
+//@Component
+@Deprecated
 public class IndexStrategyContext {
 
-    public void addDocument(IndexStrategy strategy) throws BizException, Exception {
-        strategy.addDocument();
-    }
+//    public void addDocument(IndexWriter indexWriter, IndexStrategy strategy) throws BizException, Exception {
+//        strategy.addDocument();
+//    }
 }

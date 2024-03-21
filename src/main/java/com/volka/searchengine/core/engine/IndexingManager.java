@@ -27,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 @Component
 public class IndexingManager  {
 

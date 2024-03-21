@@ -6,5 +6,4 @@ import org.apache.lucene.search.BooleanQuery;
 public interface TermStrategy {
 
     BooleanQuery createQuery(String word) throws BizException, Exception;
-
 }

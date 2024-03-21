@@ -1,7 +1,10 @@
 package com.volka.searchengine.domain.indexing.service.impl;
 
 import com.volka.searchengine.core.constant.ResponseCode;
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.SearchEngine;
+import com.volka.searchengine.core.engine.strategy.index.AcitIndexIndexStrategy;
+import com.volka.searchengine.core.engine.strategy.index.TrdpIndexIndexStrategy;
 import com.volka.searchengine.core.exception.BizException;
 import com.volka.searchengine.domain.indexing.service.IndexService;
 import com.volka.searchengine.dto.IndexingRequest;
@@ -22,12 +25,12 @@ public class IndexServiceImpl implements IndexService {
     private final SearchEngine engine;
 
     @Override
-    public ResponseCode indexing(IndexingRequest.Save param) {
+    public ResponseCode indexingAcit(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param) {
         try {
-            switch (param.getDomain()) {
+            switch (domain) {
                 case ACIT:
                     if (param.getAcitList() != null && !param.getAcitList().isEmpty()) {
-                        engine.indexing(param.getOrgId(), param.getAcitList());
+                        engine.indexing(domain, param.getOrgId(), new AcitIndexIndexStrategy(param.getAcitList()));
                         return ResponseCode.SUCCESS;
                     }
 
@@ -35,7 +38,7 @@ public class IndexServiceImpl implements IndexService {
 
                 case TRDP:
                     if (param.getTrdpList() != null && !param.getTrdpList().isEmpty()) {
-                        engine.indexing(param.getOrgId(), param.getTrdpList());
+                        engine.indexing(domain, param.getOrgId(), new TrdpIndexIndexStrategy(param.getTrdpList()));
                         return ResponseCode.SUCCESS;
                     }
 
@@ -63,8 +66,8 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public ResponseCode initialize(IndexingRequest.Init param) {
         try {
-            engine.indexing(param.getOrgId(), param.getAcitList());
-            engine.indexing(param.getOrgId(), param.getTrdpList());
+            engine.indexing(SEARCH_DOMAIN.ACIT, param.getOrgId(), new AcitIndexIndexStrategy(param.getAcitList()));
+            engine.indexing(SEARCH_DOMAIN.TRDP, param.getOrgId(), new TrdpIndexIndexStrategy(param.getTrdpList()));
 
             return ResponseCode.SUCCESS;
 

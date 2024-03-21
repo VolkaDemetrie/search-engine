@@ -1,6 +1,7 @@
 package com.volka.searchengine.domain.indexing.service;
 
 import com.volka.searchengine.core.constant.ResponseCode;
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.dto.IndexingRequest;
 
 /**
@@ -15,7 +16,7 @@ public interface IndexService {
      * @param param
      * @return
      */
-    ResponseCode indexing(IndexingRequest.Save param);
+    ResponseCode indexingAcit(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param);
 
     ResponseCode initialize(IndexingRequest.Init param);
 }

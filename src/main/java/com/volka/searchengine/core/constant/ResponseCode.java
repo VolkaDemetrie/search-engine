@@ -14,6 +14,7 @@ public enum ResponseCode {
     ,FAIL("FL0000", "실패")
     ,VALID_FAIL("FL0001", "검증실패")
     ,INIT_FAIL("FL0002", "초기화 실패")
+    ,NO_DEFINITION_("FL0003", "초기화 실패")
     ;
 
     private final String code;

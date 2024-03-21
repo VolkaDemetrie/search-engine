@@ -2,6 +2,7 @@ package com.volka.searchengine.core.engine.model;
 
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.lucene.document.Document;
 
@@ -11,8 +12,9 @@ import org.apache.lucene.document.Document;
  * @author volka
  */
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Trdp implements DocumentModel {
+public class Trdp extends DocumentModel {
     private String trdpCd;
     private String trxTyp;
     private String trdpTyp;

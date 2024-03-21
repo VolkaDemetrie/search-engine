@@ -4,6 +4,7 @@ package com.volka.searchengine.core.engine.strategy;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.strategy.search.AcitTermStrategy;
 import com.volka.searchengine.core.engine.strategy.search.TrdpTermStrategy;
+import com.volka.searchengine.core.engine.tokenizer.ChosungTokenizer;
 import com.volka.searchengine.core.exception.BizException;
 import lombok.RequiredArgsConstructor;
 import org.apache.lucene.search.BooleanQuery;

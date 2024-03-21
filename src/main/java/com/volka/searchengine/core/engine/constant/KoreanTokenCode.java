@@ -1,5 +1,10 @@
 package com.volka.searchengine.core.engine.constant;
 
+/**
+ * 초성 중성 종성 상수
+ *
+ * @author volka
+ */
 public enum KoreanTokenCode {
 
     // {'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'}

@@ -1,6 +1,7 @@
 package com.volka.searchengine.domain.indexing.controller;
 
 import com.volka.searchengine.core.constant.ResponseCode;
+import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.dto.ResponseDTO;
 import com.volka.searchengine.domain.indexing.service.IndexService;
 import com.volka.searchengine.dto.IndexingRequest;
@@ -23,10 +24,14 @@ public class IndexingController {
 
     private final IndexService indexService;
 
-    @PostMapping
-    public ResponseDTO<ResponseCode> indexing(@Valid @RequestBody IndexingRequest.Save param) {
-        return ResponseDTO.response(indexService.indexing(param));
+    @PostMapping("/{domain}")
+    public ResponseDTO<ResponseCode> indexing(
+            @PathVariable("domain") SEARCH_DOMAIN domain
+            ,@Valid @RequestBody IndexingRequest.SaveAcit param
+    ) {
+        return ResponseDTO.response(indexService.indexingAcit(domain, param));
     }
+
 
     @PostMapping("/init")
     public ResponseDTO<ResponseCode> initialize(@Valid @RequestBody IndexingRequest.Init param) {

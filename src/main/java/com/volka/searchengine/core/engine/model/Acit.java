@@ -1,8 +1,10 @@
 package com.volka.searchengine.core.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.volka.searchengine.core.annotation.Code;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.lucene.document.Document;
 
@@ -15,11 +17,16 @@ import javax.validation.constraints.NotNull;
  * @author volka
  */
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Acit implements DocumentModel {
+public class Acit extends DocumentModel {
 
     @NotBlank
     private String acitCd;
+
+    @NotNull
+    @NotBlank
+    private String acitNm;
 
     @Code
     @NotBlank
@@ -28,10 +35,6 @@ public class Acit implements DocumentModel {
     @Code
     @NotBlank
     private String acitClsfCd;
-
-    @NotNull
-    @NotBlank
-    private String acitNm;
 
     @Code
     @NotBlank
