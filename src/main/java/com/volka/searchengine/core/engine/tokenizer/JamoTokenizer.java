@@ -24,13 +24,13 @@ public class JamoTokenizer extends AbstractJamoTokenizer {
         char joongIdx;
         char jongIdx;
 
-        for(int i = 0 ; i < source.length(); i++) {
+        for (int i = 0; i < source.length(); i++) {
             sourceChar = source.charAt(i);
 
-            if(sourceChar >= 0xAC00) {
+            if (sourceChar >= 0xAC00) {
                 criteria = (sourceChar - 0xAC00);
                 choIdx = (char) (((criteria - (criteria % 28)) / 28) / 21);
-                joongIdx = (char)(((criteria - (criteria % 28)) / 28) % 21);
+                joongIdx = (char) (((criteria - (criteria % 28)) / 28) % 21);
                 jongIdx = (char) (criteria % 28);
 
                 chosungBuilder.append(CHOSUNG.getCode()[choIdx]);

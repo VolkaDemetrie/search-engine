@@ -29,7 +29,7 @@ public abstract class AbstractJamoTokenizer {
     }
 
     /**
-     * 토크나이징 대상 문자열 초성만 (영어 포함)
+     * 토크나이징 대상 문자열 초성만 (영어 + 숫자 포함)
      *
      * @param source
      * @return
@@ -38,7 +38,7 @@ public abstract class AbstractJamoTokenizer {
         char[] charArr = source.toCharArray();
 
         for (int i = 0; i < charArr.length; i++) {
-            if (!isChosung(charArr[i]) && !isEnglish(charArr[i])) return false;
+            if (!isChosung(charArr[i]) && !isEnglish(charArr[i]) && !isNumber(charArr[i])) return false;
         }
 
         return true;
@@ -56,6 +56,10 @@ public abstract class AbstractJamoTokenizer {
     private boolean isEnglish(char c) {
         return (c >= ENGLISH_UPPER_BEGIN_UNICODE && c <= ENGLISH_UPPER_END_UNICODE)
                 || (c >= ENGLISH_LOWER_BEGIN_UNICODE && c <= ENGLISH_LOWER_END_UNICODE);
+    }
+
+    private boolean isNumber(char c) {
+        return c >= NUMBER_BEGIN_UNICODE && c <= NUMBER_END_UNICODE;
     }
 
     /**
