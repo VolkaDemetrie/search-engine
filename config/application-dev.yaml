@@ -1,0 +1,26 @@
+server:
+  port: 8099
+  servlet:
+    encoding:
+      charset: UTF-8
+      force-request: true
+      force-response: true
+  http2:
+    enabled: true
+  undertow:
+    decode-url: true
+    threads:
+      io: 8 #4core
+      worker: 40 #max-threads
+    url-charset: UTF-8
+    always-set-keep-alive: true
+spring:
+#  redis:
+  profiles:
+    active: dev
+
+
+engine:
+  file:
+    idx-dir: "/home/volka/search_engine/idx"
+    origin-dir: "/home/volka/search_engine/org"

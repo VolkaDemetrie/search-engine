@@ -10,15 +10,8 @@ import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 public abstract class DocumentModel {
 
     public String chosnug;
+    public String jamo;
 
     public abstract SEARCH_DOMAIN getDomain();
 
-
-    public String getChosnug() {
-        return chosnug;
-    }
-
-    public void setChosnug(String chosnug) {
-        this.chosnug = chosnug;
-    }
 }

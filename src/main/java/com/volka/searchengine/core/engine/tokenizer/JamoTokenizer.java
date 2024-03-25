@@ -1,47 +1,51 @@
 package com.volka.searchengine.core.engine.tokenizer;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import static com.volka.searchengine.core.engine.constant.KoreanTokenCode.*;
 
 /**
- * 자모 분리 Tokenizer
+ * 자모 토크나이저
  *
  * @author volka
  */
-public abstract class JamoTokenizer {
+@Slf4j
+@Component
+public class JamoTokenizer extends AbstractJamoTokenizer {
+    @Override
+    public JamoToken tokenize(String source) {
+        StringBuilder chosungBuilder = new StringBuilder();
+        StringBuilder jamoBuilder = new StringBuilder();
+        int criteria;
+        char sourceChar;
 
-    private static final char CHOSUNG_BEGIN_UNICODE = 12593;
-    private static final char CHOSUNG_END_UNICODE = 12622;
-    private static final char HANGUEL_BEGIN_UNICODE = 44032;
-    private static final char HANGUEL_END_UNICODE = 55203;
-    private static final char NUMBER_BEGIN_UNICODE = 48;
-    private static final char NUMBER_END_UNICODE = 57;
-    private static final char ENGLISH_LOWER_BEGIN_UNICODE = 65;
-    private static final char ENGLISH_LOWER_END_UNICODE = 90;
-    private static final char ENGLISH_UPPER_BEGIN_UNICODE = 97;
-    private static final char ENGLISH_UPPER_END_UNICODE = 122;
+        char choIdx;
+        char joongIdx;
+        char jongIdx;
 
+        for(int i = 0 ; i < source.length(); i++) {
+            sourceChar = source.charAt(i);
 
-    public boolean isPossibleCharacter(char c){
-        return (c >= NUMBER_BEGIN_UNICODE && c <= NUMBER_END_UNICODE)
-                || (c >= ENGLISH_UPPER_BEGIN_UNICODE && c <= ENGLISH_UPPER_END_UNICODE)
-                || (c >= ENGLISH_LOWER_BEGIN_UNICODE && c <= ENGLISH_LOWER_END_UNICODE)
-                || (c >= HANGUEL_BEGIN_UNICODE && c <= HANGUEL_END_UNICODE)
-                || (c >= CHOSUNG_BEGIN_UNICODE && c <= CHOSUNG_END_UNICODE);
+            if(sourceChar >= 0xAC00) {
+                criteria = (sourceChar - 0xAC00);
+                choIdx = (char) (((criteria - (criteria % 28)) / 28) / 21);
+                joongIdx = (char)(((criteria - (criteria % 28)) / 28) % 21);
+                jongIdx = (char) (criteria % 28);
+
+                chosungBuilder.append(CHOSUNG.getCode()[choIdx]);
+                jamoBuilder.append(CHOSUNG.getCode()[choIdx]);
+                jamoBuilder.append(JOONGSUNG.getCode()[joongIdx]);
+
+                if (jongIdx != 0x0000) {
+                    jamoBuilder.append(JONGSUNG.getCode()[jongIdx]);
+                }
+
+            } else {
+                if (isPossibleCharacter(sourceChar)) jamoBuilder.append(sourceChar);
+            }
+        }
+
+        return new JamoToken(chosungBuilder.toString(), jamoBuilder.toString());
     }
-
-    /**
-     * [분리 기본 공식]
-     *     초성 = ( ( (글자 - 0xAC00) - (글자 - 0xAC00) % 28 ) ) / 28 ) / 21
-     *     중성 = ( ( (글자 - 0xAC00) - (글자 - 0xAC00) % 28 ) ) / 28 ) % 21
-     *     종성 = (글자 - 0xAC00) % 28
-     *
-     *     [합치기 기본 공식]
-     *     원문 = 0xAC00 + 28 * 21 * (초성의 index) + 28 * (중성의 index) + (종성의 index)
-     *
-     *     각 index 정보는 CHOSUNG, JUNGSUNG, JONGSUNG char[]에 정의한 index 입니다.
-     *     하지만 아래 코드에서는 원문이 필요 없기 때문에 합치기 위한 로직은 포함 되어 있지 않습니다.
-     * @param source
-     * @return
-     */
-    public abstract String tokenize(String source);
-
 }

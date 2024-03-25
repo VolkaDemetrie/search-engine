@@ -2,7 +2,8 @@ package com.volka.searchengine.core.engine.strategy.index;
 
 import com.volka.searchengine.core.context.ApplicationContextProvider;
 import com.volka.searchengine.core.engine.model.Acit;
-import com.volka.searchengine.core.engine.tokenizer.ChosungTokenizer;
+import com.volka.searchengine.core.engine.tokenizer.JamoToken;
+import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import com.volka.searchengine.core.exception.BizException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +33,16 @@ public class AcitIndexIndexStrategy extends IndexStrategy {
 
     @Override
     public void addDocument(IndexWriter indexWriter) throws BizException, Exception {
-        ChosungTokenizer tokenizer = ApplicationContextProvider.getBean(ChosungTokenizer.class);
-
+        JamoTokenizer tokenizer = ApplicationContextProvider.getBean(JamoTokenizer.class);
+        JamoToken token = null;
         for (Acit acit : this.acitList) {
             Document doc = new Document();
+            token = tokenizer.tokenize(acit.getAcitNm());
 
-            doc.add(new TextField("chosung", tokenizer.tokenize(acit.getAcitNm()), Field.Store.YES));
+            doc.add(new TextField("chosung", token.getChosung(), Field.Store.YES));
+            doc.add(new TextField("jamo", token.getJamo(), Field.Store.YES));
             doc.add(new TextField("acitCd", acit.getAcitCd(), Field.Store.YES));
+
             doc.add(new StringField("acitNm", acit.getAcitNm(), Field.Store.YES));
             doc.add(new StringField("acitDivCd", acit.getAcitDivCd(), Field.Store.YES));
             doc.add(new StringField("acitClsfCd", acit.getAcitClsfCd(), Field.Store.YES));
