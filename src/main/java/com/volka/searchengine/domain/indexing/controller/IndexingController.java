@@ -32,6 +32,14 @@ public class IndexingController {
         return ResponseDTO.response(indexService.indexingAcit(domain, param));
     }
 
+    @PatchMapping("/{domain}")
+    public ResponseDTO<ResponseCode> updateIndex(
+            @PathVariable("domain") SEARCH_DOMAIN domain
+            ,@Valid @RequestBody IndexingRequest.SaveAcit param
+    ) {
+        return ResponseDTO.response(indexService.updateIndex(domain, param));
+    }
+
 
     @PostMapping("/init")
     public ResponseDTO<ResponseCode> initialize(@Valid @RequestBody IndexingRequest.Init param) {

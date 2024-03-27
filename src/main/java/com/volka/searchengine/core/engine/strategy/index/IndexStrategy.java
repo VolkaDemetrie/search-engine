@@ -12,4 +12,6 @@ public abstract class IndexStrategy {
 
     public abstract void addDocument(IndexWriter indexWriter) throws BizException, Exception;
 
+    public abstract void updateDocument(IndexWriter indexWriter) throws BizException, Exception;
+
 }

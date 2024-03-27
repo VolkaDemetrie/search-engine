@@ -11,8 +11,11 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.LockObtainFailedException;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -23,11 +26,11 @@ import java.util.List;
  */
 @Slf4j
 @Getter
-public class AcitIndexIndexStrategy extends IndexStrategy {
+public class AcitIndexStrategy extends IndexStrategy {
 
     private final List<Acit> acitList;
 
-    public AcitIndexIndexStrategy(List<Acit> acitList) {
+    public AcitIndexStrategy(List<Acit> acitList) {
         this.acitList = acitList;
     }
 
@@ -39,8 +42,8 @@ public class AcitIndexIndexStrategy extends IndexStrategy {
             Document doc = new Document();
             token = tokenizer.tokenize(acit.getAcitNm());
 
-            doc.add(new TextField("chosung", token.getChosung(), Field.Store.YES));
-            doc.add(new TextField("jamo", token.getJamo(), Field.Store.YES));
+            doc.add(new TextField("chosung", token.getChosung(), Field.Store.NO));
+            doc.add(new TextField("jamo", token.getJamo(), Field.Store.NO));
             doc.add(new TextField("acitCd", acit.getAcitCd(), Field.Store.YES));
 
             doc.add(new StringField("acitNm", acit.getAcitNm(), Field.Store.YES));
@@ -52,5 +55,11 @@ public class AcitIndexIndexStrategy extends IndexStrategy {
 
             indexWriter.addDocument(doc);
         }
+        indexWriter.commit();
+    }
+
+    @Override
+    public void updateDocument(IndexWriter indexWriter) throws CorruptIndexException, LockObtainFailedException, IOException, BizException, Exception {
+
     }
 }

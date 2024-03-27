@@ -23,9 +23,9 @@ import java.util.List;
  */
 @Slf4j
 @Getter
-public class TrdpIndexIndexStrategy extends IndexStrategy {
+public class TrdpIndexStrategy extends IndexStrategy {
 
-    public TrdpIndexIndexStrategy(List<Trdp> trdpList) {
+    public TrdpIndexStrategy(List<Trdp> trdpList) {
         this.trdpList = trdpList;
     }
 
@@ -51,5 +51,11 @@ public class TrdpIndexIndexStrategy extends IndexStrategy {
 
             indexWriter.addDocument(doc);
         }
+        indexWriter.commit();
+    }
+
+    @Override
+    public void updateDocument(IndexWriter indexWriter) throws BizException, Exception {
+
     }
 }

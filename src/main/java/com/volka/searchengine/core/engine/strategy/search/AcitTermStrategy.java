@@ -4,7 +4,6 @@ import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
@@ -27,8 +26,8 @@ public class AcitTermStrategy implements TermStrategy {
     public BooleanQuery createQuery(String word) {
 
         PrefixQuery acitCdTermQuery = new PrefixQuery(new Term("acitCd", word));
-        PrefixQuery acitNmTermQuery = tokenizer.isOnlyChosungOrEng(word) ? new PrefixQuery(new Term("chosung", word)) : new PrefixQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
-//        TermQuery acitNmTermQuery = new TermQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
+        PrefixQuery acitNmJamoTermQuery = tokenizer.isOnlyChosungOrEng(word) ? new PrefixQuery(new Term("chosung", word)) : new PrefixQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
+        TermQuery acitNmTermQuery = new TermQuery(new Term("acitNm", word));
 
 //        TermQuery acitNmTermQuery = new TermQuery(new Term("chosung", word));
 
@@ -37,6 +36,7 @@ public class AcitTermStrategy implements TermStrategy {
 
         return new BooleanQuery.Builder()
                 .add(new BooleanClause(acitCdTermQuery, BooleanClause.Occur.SHOULD))
+                .add(new BooleanClause(acitNmJamoTermQuery, BooleanClause.Occur.SHOULD))
                 .add(new BooleanClause(acitNmTermQuery, BooleanClause.Occur.SHOULD))
                 .build();
 

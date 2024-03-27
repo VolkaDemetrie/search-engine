@@ -3,8 +3,8 @@ package com.volka.searchengine.domain.indexing.service.impl;
 import com.volka.searchengine.core.constant.ResponseCode;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.SearchEngine;
-import com.volka.searchengine.core.engine.strategy.index.AcitIndexIndexStrategy;
-import com.volka.searchengine.core.engine.strategy.index.TrdpIndexIndexStrategy;
+import com.volka.searchengine.core.engine.strategy.index.AcitIndexStrategy;
+import com.volka.searchengine.core.engine.strategy.index.TrdpIndexStrategy;
 import com.volka.searchengine.core.exception.BizException;
 import com.volka.searchengine.domain.indexing.service.IndexService;
 import com.volka.searchengine.dto.IndexingRequest;
@@ -30,7 +30,7 @@ public class IndexServiceImpl implements IndexService {
             switch (domain) {
                 case ACIT:
                     if (param.getAcitList() != null && !param.getAcitList().isEmpty()) {
-                        engine.indexing(domain, param.getOrgId(), new AcitIndexIndexStrategy(param.getAcitList()));
+                        engine.indexing(domain, param.getOrgId(), new AcitIndexStrategy(param.getAcitList()));
                         return ResponseCode.SUCCESS;
                     }
 
@@ -38,7 +38,7 @@ public class IndexServiceImpl implements IndexService {
 
                 case TRDP:
                     if (param.getTrdpList() != null && !param.getTrdpList().isEmpty()) {
-                        engine.indexing(domain, param.getOrgId(), new TrdpIndexIndexStrategy(param.getTrdpList()));
+                        engine.indexing(domain, param.getOrgId(), new TrdpIndexStrategy(param.getTrdpList()));
                         return ResponseCode.SUCCESS;
                     }
 
@@ -66,8 +66,8 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public ResponseCode initialize(IndexingRequest.Init param) {
         try {
-            engine.indexing(SEARCH_DOMAIN.ACIT, param.getOrgId(), new AcitIndexIndexStrategy(param.getAcitList()));
-            engine.indexing(SEARCH_DOMAIN.TRDP, param.getOrgId(), new TrdpIndexIndexStrategy(param.getTrdpList()));
+            engine.indexing(SEARCH_DOMAIN.ACIT, param.getOrgId(), new AcitIndexStrategy(param.getAcitList()));
+            engine.indexing(SEARCH_DOMAIN.TRDP, param.getOrgId(), new TrdpIndexStrategy(param.getTrdpList()));
 
             return ResponseCode.SUCCESS;
 
@@ -76,6 +76,38 @@ public class IndexServiceImpl implements IndexService {
             throw e;
         } catch (Exception e) {
             log.error("[EXCEPTION] initialize() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
+    }
+
+    @Override
+    public ResponseCode updateIndex(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param) {
+        try {
+            switch (domain) {
+                case ACIT:
+                    if (param.getAcitList() != null && !param.getAcitList().isEmpty()) {
+                        engine.indexing(domain, param.getOrgId(), new AcitIndexStrategy(param.getAcitList()));
+                        return ResponseCode.SUCCESS;
+                    }
+
+                    return ResponseCode.VALID_FAIL;
+
+                case TRDP:
+                    if (param.getTrdpList() != null && !param.getTrdpList().isEmpty()) {
+                        engine.indexing(domain, param.getOrgId(), new TrdpIndexStrategy(param.getTrdpList()));
+                        return ResponseCode.SUCCESS;
+                    }
+
+                    return ResponseCode.VALID_FAIL;
+
+                default: return ResponseCode.VALID_FAIL;
+            }
+
+        } catch (BizException e) {
+            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getLocalizedMessage(), e.toString());
             throw new BizException(ResponseCode.FAIL, e);
         }
     }

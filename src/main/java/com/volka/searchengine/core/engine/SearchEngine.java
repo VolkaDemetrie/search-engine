@@ -5,6 +5,7 @@ import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.core.engine.strategy.TermStrategyContext;
 import com.volka.searchengine.core.engine.strategy.index.IndexStrategy;
+import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import com.volka.searchengine.core.exception.BizException;
 import com.volka.searchengine.core.properties.EngineFileProperties;
 import com.volka.searchengine.core.properties.EngineProperties;
@@ -42,7 +43,7 @@ public class SearchEngine {
     private final KoreanAnalyzer koreanAnalyzer;
 //    private final IndexStrategyContext indexStrategyContext;
     private final TermStrategyContext termStrategyContext;
-
+    private final JamoTokenizer jamoTokenizer;
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(8);
 
     private static final int hitPerPage = 10; //FIXME :: 요건 따라 입력 받아서 결과 갯수 변동 가능할수도
@@ -98,7 +99,7 @@ public class SearchEngine {
 
         try (
                 Directory indexDir = NIOFSDirectory.open(generateIdxDirPathByOrgId(baseDirPath, orgId, domain));
-                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig(koreanAnalyzer))
+                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
             indexStrategy.addDocument(writer);
         } catch (BizException e) {
@@ -110,6 +111,22 @@ public class SearchEngine {
         }
 
     }
+
+//    public void updateIndex(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
+//        try (
+//                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generateIdxDirPathByOrgId(baseDirPath, orgId, domain)));
+//        ) {
+//
+//
+//            indexStrategy.addDocument(writer);
+//        } catch (BizException e) {
+//            log.error("[EXCEPTION] indexing() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+//            throw e;
+//        } catch (Exception e) {
+//            log.error("[EXCEPTION] indexing() :: {} : {}", e.getLocalizedMessage(), e.toString());
+//            throw new BizException(ResponseCode.FAIL, e);
+//        }
+//    }
 
 
     /**

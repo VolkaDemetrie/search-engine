@@ -19,4 +19,6 @@ public interface IndexService {
     ResponseCode indexingAcit(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param);
 
     ResponseCode initialize(IndexingRequest.Init param);
+
+    ResponseCode updateIndex(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param);
 }
