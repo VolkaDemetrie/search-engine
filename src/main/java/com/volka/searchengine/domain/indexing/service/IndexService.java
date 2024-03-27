@@ -18,7 +18,27 @@ public interface IndexService {
      */
     ResponseCode indexingAcit(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param);
 
+    /**
+     * 가입 시 초기화 색인
+     * @param param
+     * @return
+     */
     ResponseCode initialize(IndexingRequest.Init param);
 
+    /**
+     * 색인 업데이트
+     * @param domain
+     * @param param
+     * @return
+     */
     ResponseCode updateIndex(SEARCH_DOMAIN domain, IndexingRequest.SaveAcit param);
+
+    /**
+     * 랭킹 업데이트
+     * @param domain
+     * @param orgId
+     * @param keyCode
+     * @return
+     */
+    ResponseCode updateRank(SEARCH_DOMAIN domain, String orgId, String keyCode);
 }

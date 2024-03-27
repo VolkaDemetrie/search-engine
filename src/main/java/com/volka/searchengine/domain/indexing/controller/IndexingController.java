@@ -40,6 +40,15 @@ public class IndexingController {
         return ResponseDTO.response(indexService.updateIndex(domain, param));
     }
 
+    @PatchMapping("/rank/{domain}/{orgId}/{keyCode}")
+    public ResponseDTO<ResponseCode> updateRank(
+            @PathVariable SEARCH_DOMAIN domain
+            ,@PathVariable String orgId
+            ,@PathVariable String keyCode
+    ) {
+        return ResponseDTO.response(indexService.updateRank(domain, orgId, keyCode));
+    }
+
 
     @PostMapping("/init")
     public ResponseDTO<ResponseCode> initialize(@Valid @RequestBody IndexingRequest.Init param) {

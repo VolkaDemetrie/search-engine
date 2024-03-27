@@ -1,11 +1,13 @@
 package com.volka.searchengine;
 
+import com.volka.searchengine.core.engine.properties.Engine;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Bean;
 
-@ConfigurationPropertiesScan(basePackages = "com.volka.searchengine.core.properties")
+@ConfigurationPropertiesScan
 @SpringBootApplication
 public class SearchEngineApplication {
 
@@ -13,4 +15,10 @@ public class SearchEngineApplication {
         SpringApplication.run(SearchEngineApplication.class, args);
     }
 
+
+    @Bean
+    @ConfigurationProperties(prefix = "engine")
+    Engine createEngineProperty() {
+        return new Engine();
+    }
 }

@@ -6,7 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties("engine")
+@Deprecated
+//@ConfigurationProperties("engine")
 public class EngineProperties {
     private EngineFileProperties file;
 }

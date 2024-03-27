@@ -3,16 +3,13 @@ package com.volka.searchengine.core.engine;
 import com.volka.searchengine.core.constant.ResponseCode;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.model.DocumentModel;
+import com.volka.searchengine.core.engine.properties.Engine;
 import com.volka.searchengine.core.engine.strategy.TermStrategyContext;
 import com.volka.searchengine.core.engine.strategy.index.IndexStrategy;
-import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import com.volka.searchengine.core.exception.BizException;
-import com.volka.searchengine.core.properties.EngineFileProperties;
-import com.volka.searchengine.core.properties.EngineProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.analysis.ko.KoreanAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -25,25 +22,34 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * 검색 엔진
+ *
+ * @author volka
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class SearchEngine {
 
-    private final EngineProperties engineProperties;
+//    private final EngineProperties engineProperties;
+
+    private final Engine engine;
+
 //    private final IndexWriterConfig koreanIndexWriterConfig; FIXME :: DO NOT SHARE
-    private static String baseDirPath;
-    private final KoreanAnalyzer koreanAnalyzer;
+//    private static String baseDirPath;
+
+//    private final KoreanAnalyzer koreanAnalyzer;
 //    private final IndexStrategyContext indexStrategyContext;
     private final TermStrategyContext termStrategyContext;
-    private final JamoTokenizer jamoTokenizer;
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(8);
 
     private static final int hitPerPage = 10; //FIXME :: 요건 따라 입력 받아서 결과 갯수 변동 가능할수도
@@ -51,38 +57,33 @@ public class SearchEngine {
 
     @PostConstruct
     private void init() throws Exception {
-        EngineFileProperties fileProperties = this.engineProperties.getFile();
-        baseDirPath = fileProperties.getIdxDir();
-        File idxDir = new File(baseDirPath);
-
-        initPath(idxDir);
+        initPath();
     }
 
-
-    public void initPath(File idxDir) throws BizException, Exception{
-        if (!idxDir.exists()) {
-            if (!idxDir.mkdirs()) {
-                log.error("Indexing path init failed");
-                throw new BizException(ResponseCode.INIT_FAIL);
-            }
+    private void initPath() throws BizException, Exception {
+        Path basePath = engine.getIdxDir();
+        if (!Files.exists(basePath)) {
+            mkdirs(basePath);
         }
     }
 
+    public void mkdirs(Path path) throws BizException, Exception{
+        try {
+            Files.createDirectories(path);
+        } catch (FileAlreadyExistsException x) {
+            log.error("already exsits");
+        } catch (IOException e) {
+            log.error("Indexing path init failed");
+            throw new BizException(ResponseCode.INIT_FAIL);
+        }
+    }
 
-    public Path generateIdxDirPathByOrgId(String baseDirPath, String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
-        StringBuilder sb = new StringBuilder();
-        sb.append(baseDirPath);
-        sb.append(File.separator);
-        sb.append(orgId.substring(16));
-        sb.append(File.separator);
-        sb.append(orgId);
-        sb.append(File.separator);
-        sb.append(domain);
+    public Path generatePathByOrgId(String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
+        Path path = engine.getIdxDir().resolve(orgId.substring(16)).resolve(orgId).resolve(domain.toString());
 
-        File idxDir = new File(sb.toString());
-        initPath(idxDir);
+        if (!Files.exists(path)) mkdirs(path);
 
-        return idxDir.toPath();
+        return path;
     }
 
 
@@ -94,11 +95,8 @@ public class SearchEngine {
      * @throws IOException
      */
     public void indexing(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) throws IOException {
-
-        if (baseDirPath == null) baseDirPath = engineProperties.getFile().getIdxDir();
-
         try (
-                Directory indexDir = NIOFSDirectory.open(generateIdxDirPathByOrgId(baseDirPath, orgId, domain));
+                Directory indexDir = NIOFSDirectory.open(generatePathByOrgId(orgId, domain));
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
             indexStrategy.addDocument(writer);
@@ -139,12 +137,8 @@ public class SearchEngine {
      * @throws Exception
      */
     public List<DocumentModel> search(final String orgId, final String word, final SEARCH_DOMAIN domain) throws BizException, Exception {
-
-
-        if (baseDirPath == null) baseDirPath = engineProperties.getFile().getIdxDir();
-
         try (
-                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generateIdxDirPathByOrgId(baseDirPath, orgId, domain)));
+                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generatePathByOrgId(orgId, domain)));
         ) {
             IndexSearcher searcher = new IndexSearcher(reader, threadPool);
 
@@ -164,7 +158,6 @@ public class SearchEngine {
             log.error("[EXCEPTION] indexing() :: {} : {}", e.getLocalizedMessage(), e.toString());
             throw new BizException(ResponseCode.FAIL, e);
         }
-
     }
 
 

@@ -20,7 +20,10 @@ spring:
     active: local
 
 
+#engine:
+#  file:
+#    idx-dir: "/home/volka/search_engine/idx"
+#    origin-dir: "/home/volka/search_engine/org"
+
 engine:
-  file:
-    idx-dir: "/home/volka/search_engine/idx"
-    origin-dir: "/home/volka/search_engine/org"
+  idx-dir: "/home/volka/search_engine/idx"

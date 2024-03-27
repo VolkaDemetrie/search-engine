@@ -111,4 +111,19 @@ public class IndexServiceImpl implements IndexService {
             throw new BizException(ResponseCode.FAIL, e);
         }
     }
+
+    @Override
+    public ResponseCode updateRank(SEARCH_DOMAIN domain, String orgId, String keyCode) {
+        try {
+//            engine.updateRank(domain, orgId, keyCode)
+
+            return ResponseCode.SUCCESS;
+        } catch (BizException e) {
+            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
+    }
 }
