@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +27,9 @@ public class TrdpTermStrategy implements TermStrategy {
     @Override
     public BooleanQuery createQuery(String word) {
 
-        TermQuery trdpCdTermQuery = new TermQuery(new Term("trdpCd", word));
-        TermQuery trdpBrnTermQuery = new TermQuery(new Term("trdpBrn", word));
-        TermQuery trdpTnTermQuery = tokenizer.isOnlyChosungOrEng(word) ? new TermQuery(new Term("chosung", word)) : new TermQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
+        PrefixQuery trdpCdTermQuery = new PrefixQuery(new Term("trdpCd", word));
+        PrefixQuery trdpBrnTermQuery = new PrefixQuery(new Term("trdpBrn", word));
+        PrefixQuery trdpTnTermQuery = tokenizer.isOnlyChosungOrEng(word) ? new PrefixQuery(new Term("chosung", word)) : new PrefixQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
 
         return new BooleanQuery.Builder()
                 .add(new BooleanClause(trdpCdTermQuery, BooleanClause.Occur.SHOULD))

@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,6 +42,8 @@ public class SearchEngine {
     private final KoreanAnalyzer koreanAnalyzer;
 //    private final IndexStrategyContext indexStrategyContext;
     private final TermStrategyContext termStrategyContext;
+
+    private static final ExecutorService threadPool = Executors.newFixedThreadPool(8);
 
     private static final int hitPerPage = 10; //FIXME :: 요건 따라 입력 받아서 결과 갯수 변동 가능할수도
 
@@ -119,12 +123,13 @@ public class SearchEngine {
      */
     public List<DocumentModel> search(final String orgId, final String word, final SEARCH_DOMAIN domain) throws BizException, Exception {
 
+
         if (baseDirPath == null) baseDirPath = engineProperties.getFile().getIdxDir();
 
         try (
                 IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generateIdxDirPathByOrgId(baseDirPath, orgId, domain)));
         ) {
-            IndexSearcher searcher = new IndexSearcher(reader);
+            IndexSearcher searcher = new IndexSearcher(reader, threadPool);
 
             BooleanQuery query = termStrategyContext.createQuery(word, domain);
 

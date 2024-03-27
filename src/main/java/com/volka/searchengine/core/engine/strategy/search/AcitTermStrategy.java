@@ -4,8 +4,10 @@ import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +26,11 @@ public class AcitTermStrategy implements TermStrategy {
     @Override
     public BooleanQuery createQuery(String word) {
 
-        TermQuery acitCdTermQuery = new TermQuery(new Term("acitCd", word));
-        TermQuery acitNmTermQuery = tokenizer.isOnlyChosungOrEng(word) ? new TermQuery(new Term("chosung", word)) : new TermQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
+        PrefixQuery acitCdTermQuery = new PrefixQuery(new Term("acitCd", word));
+        PrefixQuery acitNmTermQuery = tokenizer.isOnlyChosungOrEng(word) ? new PrefixQuery(new Term("chosung", word)) : new PrefixQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
+//        TermQuery acitNmTermQuery = new TermQuery(new Term("jamo", tokenizer.tokenize(word).getJamo()));
+
+//        TermQuery acitNmTermQuery = new TermQuery(new Term("chosung", word));
 
 //        TermRangeQuery acitCdTermQuery = new TermRangeQuery("acitCd", new BytesRef(word), null, true, false);
 //        TermRangeQuery acitNmTermQuery = new TermRangeQuery("acitNm", new BytesRef(word), null, true, false);

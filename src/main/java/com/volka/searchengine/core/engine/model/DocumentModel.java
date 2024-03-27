@@ -9,8 +9,8 @@ import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
  */
 public abstract class DocumentModel {
 
-    public String chosnug;
-    public String jamo;
+    protected String chosnug;
+    protected String jamo;
 
     public abstract SEARCH_DOMAIN getDomain();
 
