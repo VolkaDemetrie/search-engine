@@ -7,12 +7,10 @@ import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import com.volka.searchengine.core.exception.BizException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexableFieldType;
 import org.apache.lucene.store.LockObtainFailedException;
 
 import java.io.IOException;
@@ -29,9 +27,13 @@ import java.util.List;
 public class AcitIndexStrategy extends IndexStrategy {
 
     private final List<Acit> acitList;
+//    private final FieldType jamoFieldType;
 
     public AcitIndexStrategy(List<Acit> acitList) {
         this.acitList = acitList;
+//        this.jamoFieldType = new FieldType();
+//        this.jamoFieldType.setStored(false);
+//        this.jamoFieldType.
     }
 
     @Override
@@ -41,6 +43,9 @@ public class AcitIndexStrategy extends IndexStrategy {
         for (Acit acit : this.acitList) {
             Document doc = new Document();
             token = tokenizer.tokenize(acit.getAcitNm());
+
+//            FieldType fieldType = new FieldType();
+//            fieldType.setStored(false);
 
             doc.add(new TextField("chosung", token.getChosung(), Field.Store.NO));
             doc.add(new TextField("jamo", token.getJamo(), Field.Store.NO));

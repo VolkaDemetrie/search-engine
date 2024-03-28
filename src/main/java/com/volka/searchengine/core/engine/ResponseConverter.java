@@ -11,6 +11,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class ResponseConverter {
         return switch (domain) {
             case ACIT -> convertToAcit(searcher, hitArr);
             case TRDP -> convertToTrdp(searcher, hitArr);
-            default -> null;
+            default -> Collections.emptyList();
         };
     }
 
