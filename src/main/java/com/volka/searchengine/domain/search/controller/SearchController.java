@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class SearchController {
     public List<DocumentModel> searchWord(
             @PathVariable(value = "domain") SEARCH_DOMAIN domain
             ,@PathVariable(value = "orgId") @SysId String orgId
-            ,@RequestParam(value = "word") @NotBlank String word
+            ,@RequestParam(value = "word") @NotBlank @Size(max = 50) String word
     ) {
         return searchService.searchWord(domain, orgId, word);
     }
