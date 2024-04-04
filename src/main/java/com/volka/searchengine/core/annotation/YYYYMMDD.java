@@ -1,10 +1,10 @@
 package com.volka.searchengine.core.annotation;
 
 import com.volka.searchengine.core.validator.YYYYMMDDValidator;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
-import javax.validation.Constraint;
-import javax.validation.Payload;
 
 
 /**

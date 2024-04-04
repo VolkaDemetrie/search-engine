@@ -1,17 +1,16 @@
 package com.volka.searchengine.core.validator;
 
 import com.volka.searchengine.core.annotation.Code;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 /**
  * 공통코드 검증 어노테이션
  * @author volka
  */
 @Component
-public class CodeValidator extends Validator implements ConstraintValidator<Code, String> {
+public class CodeValidator extends AnnotationValidator implements ConstraintValidator<Code, String> {
 
     @Override
     public void initialize(Code constraintAnnotation) {

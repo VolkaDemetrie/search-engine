@@ -30,6 +30,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<DocumentModel> searchWord(SEARCH_DOMAIN domain, String orgId, String word) {
         try {
+            if (word == null || word.isBlank()) throw new BizException("SR0001"); //검색어가 존재하지 않습니다
             return engine.search(orgId, word, domain);
         } catch (BizException e) {
             log.error("[EXCEPTION] searchWord() :: {} : {}", e.getCode(), e.getLocalizedMessage());

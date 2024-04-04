@@ -11,8 +11,8 @@ import lombok.Getter;
  */
 @Getter
 public class ResponseDTO<T> {
-    private String code;
-    private String msg;
+    private final String code;
+    private final String msg;
     private T content;
 
     ResponseDTO(ResponseCode responseCode, T content) {
@@ -26,11 +26,30 @@ public class ResponseDTO<T> {
         this.msg = responseCode.getMsg();
     }
 
+    ResponseDTO(String code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
+    ResponseDTO(String code, String msg, T content) {
+        this.code = code;
+        this.msg = msg;
+        this.content = content;
+    }
+
     public static <T> ResponseDTO<T> response(T content) {
         return new ResponseDTO<>(ResponseCode.SUCCESS, content);
     }
 
     public static ResponseDTO<ResponseCode> response(ResponseCode responseCode) {
         return new ResponseDTO<>(responseCode);
+    }
+
+    public static <T> ResponseDTO<T> response(String code, String msg) {
+        return new ResponseDTO<>(code, msg);
+    }
+
+    public static <T> ResponseDTO<T> response(String code, String msg, T content) {
+        return new ResponseDTO<>(code, msg, content);
     }
 }

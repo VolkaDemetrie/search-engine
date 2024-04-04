@@ -10,10 +10,7 @@ import com.volka.searchengine.core.exception.BizException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.*;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -110,21 +107,26 @@ public class SearchEngine {
 
     }
 
-//    public void updateIndex(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
-//        try (
-//                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generateIdxDirPathByOrgId(baseDirPath, orgId, domain)));
-//        ) {
-//
-//
-//            indexStrategy.addDocument(writer);
-//        } catch (BizException e) {
-//            log.error("[EXCEPTION] indexing() :: {} : {}", e.getCode(), e.getLocalizedMessage());
-//            throw e;
-//        } catch (Exception e) {
-//            log.error("[EXCEPTION] indexing() :: {} : {}", e.getLocalizedMessage(), e.toString());
-//            throw new BizException(ResponseCode.FAIL, e);
-//        }
-//    }
+    /**
+     * 색인 업데이트
+     * @param domain
+     * @param orgId
+     * @param indexStrategy
+     */
+    public void updateIndex(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
+        try (
+                Directory indexDir = NIOFSDirectory.open(generatePathByOrgId(orgId, domain));
+                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
+        ) {
+            indexStrategy.updateDocument(writer);
+        } catch (BizException e) {
+            log.error("[EXCEPTION] indexing() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] indexing() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
+    }
 
 
     /**
@@ -141,7 +143,6 @@ public class SearchEngine {
                 IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generatePathByOrgId(orgId, domain)));
         ) {
             IndexSearcher searcher = new IndexSearcher(reader, threadPool);
-
             BooleanQuery query = termStrategyContext.createQuery(word, domain);
 
             TopDocs docs = searcher.search(query, hitPerPage);
@@ -161,5 +162,6 @@ public class SearchEngine {
     }
 
 
-
+    public void updateRank(SEARCH_DOMAIN domain, String orgId, String keyCode) {
+    }
 }

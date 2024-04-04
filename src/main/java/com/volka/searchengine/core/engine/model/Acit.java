@@ -1,15 +1,13 @@
 package com.volka.searchengine.core.engine.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.volka.searchengine.core.annotation.Code;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.lucene.document.Document;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * 계정과목 색인파일 모델
@@ -24,24 +22,22 @@ public class Acit extends DocumentModel {
     @NotBlank
     private String acitCd;
 
-    @NotNull
     @NotBlank
     private String acitNm;
 
-    @Code
     @NotBlank
+    @Code
     private String acitDivCd;
 
-    @Code
     @NotBlank
+    @Code
     private String acitClsfCd;
 
-    @Code
     @NotBlank
+    @Code
     private String acitTyp;
 
-    private String useYn;
-
+//    private String useYn;
 //    @Code
 //    private String dbtCrdtDiv;
 
@@ -51,7 +47,7 @@ public class Acit extends DocumentModel {
         this.acitClsfCd = document.get("acitClsfCd");
         this.acitNm = document.get("acitNm");
         this.acitTyp = document.get("acitTyp");
-        this.useYn = document.get("useYn");
+//        this.useYn = document.get("useYn");
     }
 
     public static Acit of(Document document) {

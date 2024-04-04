@@ -4,12 +4,13 @@ import com.volka.searchengine.core.annotation.SysId;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.domain.search.service.SearchService;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/search")
+@RequestMapping("/search/api/v1/search")
 @RestController
 public class SearchController {
 
@@ -29,7 +30,7 @@ public class SearchController {
     public List<DocumentModel> searchWord(
             @PathVariable(value = "domain") SEARCH_DOMAIN domain
             ,@PathVariable(value = "orgId") @SysId String orgId
-            ,@RequestParam(value = "word") @NotBlank @Size(max = 50) String word
+            ,@RequestParam(value = "word") @NotBlank @NotNull @Size(max = 50) String word
     ) {
         return searchService.searchWord(domain, orgId, word);
     }

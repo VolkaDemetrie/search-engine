@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  *
  * @author volka
  */
-public class Validator {
+public class AnnotationValidator {
 
     protected static final Pattern NUMBER_VALID_PATTERN = Pattern.compile("^[0-9]*$"); //숫자만 패턴
     protected static final Pattern SYSTEM_CODE_PATTERN = Pattern.compile("^[0-9A-Z]{7,10}$"); //공통코드 정규식. 그룹코드 고려하여 7자리 포함

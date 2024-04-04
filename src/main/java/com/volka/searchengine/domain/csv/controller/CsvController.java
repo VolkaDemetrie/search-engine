@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/search/csv")
+@RequestMapping("/search/api/v1/search/csv")
 @RestController
 public class CsvController {
 

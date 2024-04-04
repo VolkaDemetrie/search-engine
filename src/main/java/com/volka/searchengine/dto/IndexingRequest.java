@@ -3,10 +3,11 @@ package com.volka.searchengine.dto;
 import com.volka.searchengine.core.annotation.SysId;
 import com.volka.searchengine.core.engine.model.Acit;
 import com.volka.searchengine.core.engine.model.Trdp;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface IndexingRequest {
@@ -19,11 +20,17 @@ public interface IndexingRequest {
         @SysId
         private String orgId;
 
-        @Nullable
+        @NotEmpty
         @Valid
         private List<Acit> acitList;
+    }
 
-        @Nullable
+    @Data
+    class SaveTrdp {
+        @SysId
+        private String orgId;
+
+        @NotEmpty
         @Valid
         private List<Trdp> trdpList;
     }
@@ -38,5 +45,15 @@ public interface IndexingRequest {
 
         @Valid
         private List<Acit> acitList;
+    }
+
+    @Data
+    class Delete {
+        @SysId
+        private String orgId;
+
+        @NotNull
+        @NotEmpty
+        private List<String> keyList;
     }
 }

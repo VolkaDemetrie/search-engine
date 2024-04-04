@@ -2,10 +2,10 @@ package com.volka.searchengine.core.validator;
 
 import com.volka.searchengine.core.annotation.YYYYMMDD;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.text.SimpleDateFormat;
 
 /**
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
  * @author volka
  */
 @Component
-public class YYYYMMDDValidator extends Validator implements ConstraintValidator<YYYYMMDD, String> {
+public class YYYYMMDDValidator extends AnnotationValidator implements ConstraintValidator<YYYYMMDD, String> {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 
@@ -31,7 +31,6 @@ public class YYYYMMDDValidator extends Validator implements ConstraintValidator<
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         try {
-            // null check 는 별도로 여기서는 패턴만 체크
             if (s == null || s.isEmpty()) return false;
 
             formatter.parse(s);
