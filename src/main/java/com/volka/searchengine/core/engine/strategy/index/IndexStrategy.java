@@ -2,6 +2,7 @@ package com.volka.searchengine.core.engine.strategy.index;
 
 import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.core.exception.BizException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 
 import java.io.IOException;
@@ -20,4 +21,5 @@ public interface IndexStrategy {
 
     void updateDocument(IndexWriter indexWriter) throws IOException, Exception;
 
+    boolean isExistIndex(IndexReader reader) throws IOException, Exception;
 }

@@ -57,5 +57,5 @@ public interface IndexService {
      * @param param
      * @return
      */
-    ResponseCode deleteIndex(SEARCH_DOMAIN domain, IndexingRequest.Delete param);
+    ResponseCode deleteIndexById(SEARCH_DOMAIN domain, IndexingRequest.Delete param);
 }

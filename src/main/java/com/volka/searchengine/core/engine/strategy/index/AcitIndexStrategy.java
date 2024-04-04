@@ -10,6 +10,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 
@@ -56,8 +57,6 @@ public class AcitIndexStrategy implements IndexStrategy {
         for (Acit acit : this.acitList) {
             indexWriter.addDocument(documentation(acit, tokenizer));
         }
-
-        indexWriter.commit();
     }
 
     @Override
@@ -68,7 +67,16 @@ public class AcitIndexStrategy implements IndexStrategy {
             Term updateTargetTerm = new Term("acitCd", acit.getAcitCd());
             indexWriter.updateDocument(updateTargetTerm, documentation(acit, tokenizer));
         }
+    }
 
-        indexWriter.commit();
+    @Override
+    public boolean isExistIndex(IndexReader reader) throws IOException, Exception {
+
+        for (Acit acit : acitList) {
+            Term term = new Term("acitCd", acit.getAcitCd());
+            if (reader.totalTermFreq(term) > 0) return true;
+        }
+        
+        return false;
     }
 }

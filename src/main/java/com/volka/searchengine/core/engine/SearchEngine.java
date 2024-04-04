@@ -94,9 +94,14 @@ public class SearchEngine {
     public void indexing(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) throws IOException {
         try (
                 Directory indexDir = NIOFSDirectory.open(generatePathByOrgId(orgId, domain));
+                IndexReader reader = DirectoryReader.open(indexDir);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
+
+            if (indexStrategy.isExistIndex(reader)) throw new BizException("IX0000"); //이미 존재하는 색인입니다.
             indexStrategy.addDocument(writer);
+            writer.commit();
+
         } catch (BizException e) {
             log.error("[EXCEPTION] indexing() :: {} : {}", e.getCode(), e.getLocalizedMessage());
             throw e;
@@ -119,6 +124,7 @@ public class SearchEngine {
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
             indexStrategy.updateDocument(writer);
+            writer.commit();
         } catch (BizException e) {
             log.error("[EXCEPTION] indexing() :: {} : {}", e.getCode(), e.getLocalizedMessage());
             throw e;
@@ -163,5 +169,15 @@ public class SearchEngine {
 
 
     public void updateRank(SEARCH_DOMAIN domain, String orgId, String keyCode) {
+    }
+
+    /**
+     * 색인 선택 삭제
+     *
+     * @param domain
+     * @param orgId
+     * @param keyList
+     */
+    public void deleteIndexById(SEARCH_DOMAIN domain, String orgId, List<String> keyList) {
     }
 }

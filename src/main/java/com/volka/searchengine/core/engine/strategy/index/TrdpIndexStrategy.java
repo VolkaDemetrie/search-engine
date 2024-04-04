@@ -1,6 +1,7 @@
 package com.volka.searchengine.core.engine.strategy.index;
 
 import com.volka.searchengine.core.context.ApplicationContextProvider;
+import com.volka.searchengine.core.engine.model.Acit;
 import com.volka.searchengine.core.engine.model.Trdp;
 import com.volka.searchengine.core.engine.tokenizer.JamoToken;
 import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
@@ -10,6 +11,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 
@@ -69,5 +71,15 @@ public class TrdpIndexStrategy implements IndexStrategy {
         }
 
         indexWriter.commit();
+    }
+
+    @Override
+    public boolean isExistIndex(IndexReader reader) throws IOException, Exception {
+        for (Trdp trdp : trdpList) {
+            Term term = new Term("trdpCd", trdp.getTrdpCd());
+            if (reader.totalTermFreq(term) > 0) return true;
+        }
+
+        return false;
     }
 }

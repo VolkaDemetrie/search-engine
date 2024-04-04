@@ -49,7 +49,7 @@ public class IndexingController {
             @PathVariable("domain") SEARCH_DOMAIN domain
             ,@Valid @RequestBody IndexingRequest.Delete param
     ) {
-        return ResponseDTO.response(indexService.deleteIndex(domain, param));
+        return ResponseDTO.response(indexService.deleteIndexById(domain, param));
     }
 
 //    @PatchMapping("/rank/{domain}/{orgId}/{keyCode}")

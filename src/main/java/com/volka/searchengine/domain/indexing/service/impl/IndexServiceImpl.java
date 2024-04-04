@@ -116,7 +116,16 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    public ResponseCode deleteIndex(SEARCH_DOMAIN domain, IndexingRequest.Delete param) {
-        return null;
+    public ResponseCode deleteIndexById(SEARCH_DOMAIN domain, IndexingRequest.Delete param) {
+        try {
+            engine.deleteIndexById(domain, param.getOrgId(), param.getKeyList());
+            return ResponseCode.SUCCESS;
+        } catch (BizException e) {
+            log.error("[EXCEPTION] deleteIndex() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] deleteIndex() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
     }
 }
