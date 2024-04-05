@@ -51,12 +51,8 @@ public class IndexServiceImpl implements IndexService {
         IndexStrategy indexStrategy = null;
 
         switch (domain) {
-            case ACIT -> {
-                indexStrategy = new AcitIndexStrategy((List<Acit>) modelList);
-            }
-            case TRDP -> {
-                indexStrategy = new TrdpIndexStrategy((List<Trdp>) modelList);
-            }
+            case ACIT -> indexStrategy = new AcitIndexStrategy((List<Acit>) modelList);
+            case TRDP -> indexStrategy = new TrdpIndexStrategy((List<Trdp>) modelList);
             default -> throw new BizException(ResponseCode.VALID_FAIL);
         }
 
@@ -73,8 +69,8 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public ResponseCode initialize(IndexingRequest.Init param) {
         try {
-            engine.indexing(SEARCH_DOMAIN.ACIT, param.getOrgId(), new AcitIndexStrategy(param.getAcitList()));
-            engine.indexing(SEARCH_DOMAIN.TRDP, param.getOrgId(), new TrdpIndexStrategy(param.getTrdpList()));
+            engine.initializeIndexByDomain(SEARCH_DOMAIN.ACIT, param.getOrgId(), new AcitIndexStrategy(param.getAcitList()));
+            engine.initializeIndexByDomain(SEARCH_DOMAIN.TRDP, param.getOrgId(), new TrdpIndexStrategy(param.getTrdpList()));
 
             return ResponseCode.SUCCESS;
 

@@ -39,7 +39,7 @@ public class ExceptionControllerAdvice {
 
             if (e instanceof BizException) {
                 BizException bizException = (BizException) e;
-                return ResponseDTO.response(bizException.getCode(), messageSource.getMessage(bizException.getCode(), null, LocaleContextHolder.getLocale()));
+                return ResponseDTO.response(bizException.getCode(), messageSource.getMessage(bizException.getCode(), null, LocaleContextHolder.getLocale()), bizException.getContent());
 
             } else if (e instanceof MethodArgumentNotValidException) {
                 Map<String, String> errMap = new HashMap<>();
@@ -62,7 +62,7 @@ public class ExceptionControllerAdvice {
                 } catch (Exception ex) {
                     log.error("valid exception handler error :: {}", ex);
                 }
-            } else if (e instanceof BindException) { //바인드 예외 추가
+            } else if (e instanceof BindException) {
                 Map<String, String> errMap = new HashMap<>();
 
                 try {

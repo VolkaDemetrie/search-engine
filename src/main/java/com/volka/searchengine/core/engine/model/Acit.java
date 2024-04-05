@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.lucene.document.Document;
+import org.springframework.format.annotation.NumberFormat;
 
 
 /**
@@ -20,6 +21,7 @@ import org.apache.lucene.document.Document;
 public class Acit extends DocumentModel {
 
     @NotBlank
+    @NumberFormat
     private String acitCd;
 
     @NotBlank
@@ -30,7 +32,7 @@ public class Acit extends DocumentModel {
     private String acitDivCd;
 
     @NotBlank
-    @Code
+    @NumberFormat
     private String acitClsfCd;
 
     @NotBlank
@@ -58,10 +60,5 @@ public class Acit extends DocumentModel {
     public SEARCH_DOMAIN getDomain() {
         return SEARCH_DOMAIN.ACIT;
     }
-
-
-
-
-
 
 }

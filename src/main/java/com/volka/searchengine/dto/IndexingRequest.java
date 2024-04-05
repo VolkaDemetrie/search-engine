@@ -40,9 +40,11 @@ public interface IndexingRequest {
         @SysId
         private String orgId;
 
+        @NotEmpty
         @Valid
         private List<Trdp> trdpList;
 
+        @NotEmpty
         @Valid
         private List<Acit> acitList;
     }

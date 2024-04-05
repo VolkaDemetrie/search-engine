@@ -12,6 +12,7 @@ import lombok.Getter;
 public class BizException extends RuntimeException {
     private String code;
     private String msg;
+    private Object content;
 
     public BizException(ResponseCode responseCode) {
         this.code = responseCode.getCode();
@@ -32,5 +33,10 @@ public class BizException extends RuntimeException {
     public BizException(String errCode, Throwable t) {
         super(t);
         this.code = errCode;
+    }
+
+    public BizException(String errCode, Object content) {
+        this.code = errCode;
+        this.content = content;
     }
 }

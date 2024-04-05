@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -75,8 +77,12 @@ public class SearchEngine {
         }
     }
 
-    public Path generatePathByOrgId(String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
-        Path path = engine.getIdxDir().resolve(orgId.substring(16)).resolve(orgId).resolve(domain.toString());
+    private Path generatePath(String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
+        return engine.getIdxDir().resolve(orgId.substring(16)).resolve(orgId).resolve(domain.toString());
+    }
+
+    public Path generatePathWithMkdir(String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
+        Path path = generatePath(orgId, domain);
 
         if (!Files.exists(path)) mkdirs(path);
 
@@ -93,12 +99,12 @@ public class SearchEngine {
      */
     public void indexing(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) throws IOException {
         try (
-                Directory indexDir = NIOFSDirectory.open(generatePathByOrgId(orgId, domain));
+                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
                 IndexReader reader = DirectoryReader.open(indexDir);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
 
-            if (indexStrategy.isExistIndex(reader)) throw new BizException("IX0000"); //이미 존재하는 색인입니다.
+            validDuplicated(reader, indexStrategy);
             indexStrategy.addDocument(writer);
             writer.commit();
 
@@ -109,7 +115,31 @@ public class SearchEngine {
             log.error("[EXCEPTION] indexing() :: {} : {}", e.getLocalizedMessage(), e.toString());
             throw new BizException(ResponseCode.FAIL, e);
         }
+    }
 
+    /**
+     * 도메인별 색인 초기화
+     * @param domain
+     * @param orgId
+     * @param indexStrategy
+     * @throws Exception
+     */
+    public void initializeIndexByDomain(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) throws Exception {
+        if (Files.exists(generatePath(orgId, domain))) deleteIndexAll(domain, orgId);
+        indexing(domain, orgId, indexStrategy);
+    }
+
+
+    private void validDuplicated(IndexReader reader, IndexStrategy indexStrategy) throws BizException, Exception {
+        List<DocumentModel> duplicateList = indexStrategy.getDuplicateList(reader);
+
+        if (duplicateList.size() > 0) {
+            Map<String, List<DocumentModel>> resultMap = new HashMap<>();
+            resultMap.put("duplicateList", duplicateList);
+            throw new BizException("IX0000", resultMap); //이미 존재하는 색인입니다.
+        }
+
+        duplicateList = null;
     }
 
     /**
@@ -120,16 +150,16 @@ public class SearchEngine {
      */
     public void updateIndex(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
         try (
-                Directory indexDir = NIOFSDirectory.open(generatePathByOrgId(orgId, domain));
+                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
             indexStrategy.updateDocument(writer);
             writer.commit();
         } catch (BizException e) {
-            log.error("[EXCEPTION] indexing() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getCode(), e.getLocalizedMessage());
             throw e;
         } catch (Exception e) {
-            log.error("[EXCEPTION] indexing() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getLocalizedMessage(), e.toString());
             throw new BizException(ResponseCode.FAIL, e);
         }
     }
@@ -146,7 +176,7 @@ public class SearchEngine {
      */
     public List<DocumentModel> search(final String orgId, final String word, final SEARCH_DOMAIN domain) throws BizException, Exception {
         try (
-                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generatePathByOrgId(orgId, domain)));
+                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generatePathWithMkdir(orgId, domain)));
         ) {
             IndexSearcher searcher = new IndexSearcher(reader, threadPool);
             BooleanQuery query = termStrategyContext.createQuery(word, domain);
@@ -179,5 +209,49 @@ public class SearchEngine {
      * @param keyList
      */
     public void deleteIndexById(SEARCH_DOMAIN domain, String orgId, List<String> keyList) {
+        try (
+                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
+        ) {
+
+            String fieldId = null;
+            Term term = null;
+
+            switch (domain) {
+                case ACIT -> fieldId = "acitCd";
+                case TRDP -> fieldId = "trdpCd";
+                default -> throw new BizException("");
+            }
+
+            for (String key : keyList) {
+                term = new Term(fieldId, key);
+                writer.deleteDocuments(term);
+            }
+
+            writer.commit();
+
+        } catch (BizException e) {
+            log.error("[EXCEPTION] deleteIndexAll() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] deleteIndexAll() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
+    }
+
+    private void deleteIndexAll(SEARCH_DOMAIN domain, String orgId) {
+        try (
+                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
+        ) {
+            writer.deleteAll();
+            writer.commit();
+        } catch (BizException e) {
+            log.error("[EXCEPTION] deleteIndexAll() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] deleteIndexAll() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
     }
 }

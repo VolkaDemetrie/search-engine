@@ -2,6 +2,7 @@ package com.volka.searchengine.core.engine.strategy.index;
 
 import com.volka.searchengine.core.context.ApplicationContextProvider;
 import com.volka.searchengine.core.engine.model.Acit;
+import com.volka.searchengine.core.engine.model.DocumentModel;
 import com.volka.searchengine.core.engine.tokenizer.JamoToken;
 import com.volka.searchengine.core.engine.tokenizer.JamoTokenizer;
 import com.volka.searchengine.core.exception.BizException;
@@ -15,6 +16,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -70,13 +72,15 @@ public class AcitIndexStrategy implements IndexStrategy {
     }
 
     @Override
-    public boolean isExistIndex(IndexReader reader) throws IOException, Exception {
+    public List<DocumentModel> getDuplicateList(IndexReader reader) throws IOException, Exception {
+
+        List<DocumentModel> duplicateList = new ArrayList<>();
 
         for (Acit acit : acitList) {
             Term term = new Term("acitCd", acit.getAcitCd());
-            if (reader.totalTermFreq(term) > 0) return true;
+            if (reader.totalTermFreq(term) > 0) duplicateList.add(acit);
         }
         
-        return false;
+        return duplicateList;
     }
 }

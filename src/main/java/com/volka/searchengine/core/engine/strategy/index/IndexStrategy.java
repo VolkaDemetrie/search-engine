@@ -21,5 +21,5 @@ public interface IndexStrategy {
 
     void updateDocument(IndexWriter indexWriter) throws IOException, Exception;
 
-    boolean isExistIndex(IndexReader reader) throws IOException, Exception;
+    List<DocumentModel> getDuplicateList(IndexReader reader) throws IOException, Exception;
 }
