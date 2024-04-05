@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice
-public class ExceptionControllerAdvice {
+public class ExceptionRestControllerAdvice {
 
     private final MessageSource messageSource;
 

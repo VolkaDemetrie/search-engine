@@ -2,6 +2,7 @@ package com.volka.searchengine.core.engine.model;
 
 import com.volka.searchengine.core.annotation.Code;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,21 +23,26 @@ public class Acit extends DocumentModel {
 
     @NotBlank
     @NumberFormat
+    @Schema(description = "계정과목 코드")
     private String acitCd;
 
     @NotBlank
+    @Schema(description = "계정과목명")
     private String acitNm;
 
     @NotBlank
     @Code
+    @Schema(description = "계정과목 구분 코드")
     private String acitDivCd;
 
     @NotBlank
     @NumberFormat
+    @Schema(description = "계정과목 대분류 코드")
     private String acitClsfCd;
 
     @NotBlank
     @Code
+    @Schema(description = "계정과목 유형")
     private String acitTyp;
 
 //    private String useYn;
@@ -56,9 +62,9 @@ public class Acit extends DocumentModel {
         return new Acit(document);
     }
 
-    @Override
-    public SEARCH_DOMAIN getDomain() {
-        return SEARCH_DOMAIN.ACIT;
-    }
+//    @Override
+//    public SEARCH_DOMAIN getDomain() {
+//        return SEARCH_DOMAIN.ACIT;
+//    }
 
 }

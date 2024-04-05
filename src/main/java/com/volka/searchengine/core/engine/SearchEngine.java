@@ -108,11 +108,9 @@ public class SearchEngine {
     public void indexing(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
         try (
                 Directory indexDir = getIndexDir(domain, orgId);
-                IndexReader reader = DirectoryReader.open(indexDir);
-                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
+                IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig());
         ) {
-
-            validDuplicated(reader, indexStrategy);
+            validDuplicated(indexDir, indexStrategy);
             indexStrategy.addDocument(writer);
             writer.commit();
 
@@ -138,16 +136,29 @@ public class SearchEngine {
     }
 
 
-    private void validDuplicated(IndexReader reader, IndexStrategy indexStrategy) throws BizException, Exception {
-        List<DocumentModel> duplicateList = indexStrategy.getDuplicateList(reader);
+    private void validDuplicated(Directory indexDir, IndexStrategy indexStrategy) {
+        try (IndexReader reader = DirectoryReader.open(indexDir);) {
+            if (reader.numDocs() > 0) {
+                List<DocumentModel> duplicateList = indexStrategy.getDuplicateList(reader);
 
-        if (duplicateList.size() > 0) {
-            Map<String, List<DocumentModel>> resultMap = new HashMap<>();
-            resultMap.put("duplicateList", duplicateList);
-            throw new BizException("IX0000", resultMap); //이미 존재하는 색인입니다.
+                if (duplicateList.size() > 0) {
+                    Map<String, List<DocumentModel>> resultMap = new HashMap<>();
+                    resultMap.put("duplicateList", duplicateList);
+                    throw new BizException("IX0000", resultMap); //이미 존재하는 색인입니다.
+                }
+
+                duplicateList = null;
+            }
+        } catch (IOException e) {
+            log.error("[EXCEPTION] validDuplicated() :: {}", e.getLocalizedMessage());
+            throw new BizException(ResponseCode.FAIL, e);
+        } catch (BizException e) {
+            log.error("[EXCEPTION] validDuplicated() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("[EXCEPTION] validDuplicated() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
         }
-
-        duplicateList = null;
     }
 
     /**

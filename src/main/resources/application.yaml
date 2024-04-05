@@ -1,10 +1,5 @@
 server:
   port: 8099
-  servlet:
-    encoding:
-      charset: UTF-8
-      force-request: true
-      force-response: true
   http2:
     enabled: true
   undertow:
@@ -14,16 +9,31 @@ server:
       worker: 40 #max-threads
     url-charset: UTF-8
     always-set-keep-alive: true
+    direct-buffers: true
+
 spring:
 #  redis:
   profiles:
     active: local
 
 
-#engine:
-#  file:
-#    idx-dir: "/home/volka/search_engine/idx"
-#    origin-dir: "/home/volka/search_engine/org"
-
 engine:
   idx-dir: "/home/volka/search_engine/idx"
+
+springdoc:
+  swagger-ui:
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    default-models-expand-depth: 3
+    default-model-expand-depth: 3
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
+  paths-to-match:
+    - /search/api/v1/**
