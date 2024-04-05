@@ -16,6 +16,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.LockFactory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.springframework.stereotype.Component;
 
@@ -44,10 +45,9 @@ public class SearchEngine {
     private final Engine engine;
 
 //    private final IndexWriterConfig koreanIndexWriterConfig; FIXME :: DO NOT SHARE
-//    private static String baseDirPath;
 
-//    private final KoreanAnalyzer koreanAnalyzer;
-//    private final IndexStrategyContext indexStrategyContext;
+    private final LockFactory lockFactory;
+
     private final TermStrategyContext termStrategyContext;
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(8);
 
@@ -81,7 +81,8 @@ public class SearchEngine {
         return engine.getIdxDir().resolve(orgId.substring(16)).resolve(orgId).resolve(domain.toString());
     }
 
-    public Path generatePathWithMkdir(String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
+
+    public Path generatePathWithMkdir(String orgId, SEARCH_DOMAIN domain) throws Exception {
         Path path = generatePath(orgId, domain);
 
         if (!Files.exists(path)) mkdirs(path);
@@ -89,17 +90,24 @@ public class SearchEngine {
         return path;
     }
 
+    private Directory getIndexDir(final SEARCH_DOMAIN domain, final String orgId) {
+        try {
+            return NIOFSDirectory.open(generatePathWithMkdir(orgId, domain), lockFactory);
+        } catch (Exception e) {
+            log.error("[EXCEPTION] getIndexDir() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            throw new BizException(ResponseCode.FAIL, e);
+        }
+    }
 
     /**
      * 색인
      * @param domain
      * @param orgId
      * @param indexStrategy
-     * @throws IOException
      */
-    public void indexing(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) throws IOException {
+    public void indexing(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
         try (
-                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+                Directory indexDir = getIndexDir(domain, orgId);
                 IndexReader reader = DirectoryReader.open(indexDir);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
@@ -150,7 +158,8 @@ public class SearchEngine {
      */
     public void updateIndex(final SEARCH_DOMAIN domain, final String orgId, final IndexStrategy indexStrategy) {
         try (
-                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+//                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+                Directory indexDir = getIndexDir(domain, orgId);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
             indexStrategy.updateDocument(writer);
@@ -171,12 +180,11 @@ public class SearchEngine {
      * @param word
      * @param domain
      * @return
-     * @throws BizException
-     * @throws Exception
      */
-    public List<DocumentModel> search(final String orgId, final String word, final SEARCH_DOMAIN domain) throws BizException, Exception {
+    public List<DocumentModel> search(final String orgId, final String word, final SEARCH_DOMAIN domain) {
         try (
-                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generatePathWithMkdir(orgId, domain)));
+//                IndexReader reader = DirectoryReader.open(NIOFSDirectory.open(generatePathWithMkdir(orgId, domain)));
+                IndexReader reader = DirectoryReader.open(getIndexDir(domain, orgId));
         ) {
             IndexSearcher searcher = new IndexSearcher(reader, threadPool);
             BooleanQuery query = termStrategyContext.createQuery(word, domain);
@@ -210,7 +218,8 @@ public class SearchEngine {
      */
     public void deleteIndexById(SEARCH_DOMAIN domain, String orgId, List<String> keyList) {
         try (
-                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+//                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+                Directory indexDir = getIndexDir(domain, orgId);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
 
@@ -241,7 +250,8 @@ public class SearchEngine {
 
     private void deleteIndexAll(SEARCH_DOMAIN domain, String orgId) {
         try (
-                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+//                Directory indexDir = NIOFSDirectory.open(generatePathWithMkdir(orgId, domain));
+                Directory indexDir = getIndexDir(domain, orgId);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig())
         ) {
             writer.deleteAll();

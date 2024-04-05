@@ -103,10 +103,10 @@ public class IndexServiceImpl implements IndexService {
             engine.updateRank(domain, orgId, keyCode);
             return ResponseCode.SUCCESS;
         } catch (BizException e) {
-            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            log.error("[EXCEPTION] updateRank() :: {} : {}", e.getCode(), e.getLocalizedMessage());
             throw e;
         } catch (Exception e) {
-            log.error("[EXCEPTION] updateIndex() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            log.error("[EXCEPTION] updateRank() :: {} : {}", e.getLocalizedMessage(), e.toString());
             throw new BizException(ResponseCode.FAIL, e);
         }
     }
@@ -117,10 +117,10 @@ public class IndexServiceImpl implements IndexService {
             engine.deleteIndexById(domain, param.getOrgId(), param.getKeyList());
             return ResponseCode.SUCCESS;
         } catch (BizException e) {
-            log.error("[EXCEPTION] deleteIndex() :: {} : {}", e.getCode(), e.getLocalizedMessage());
+            log.error("[EXCEPTION] deleteIndexById() :: {} : {}", e.getCode(), e.getLocalizedMessage());
             throw e;
         } catch (Exception e) {
-            log.error("[EXCEPTION] deleteIndex() :: {} : {}", e.getLocalizedMessage(), e.toString());
+            log.error("[EXCEPTION] deleteIndexById() :: {} : {}", e.getLocalizedMessage(), e.toString());
             throw new BizException(ResponseCode.FAIL, e);
         }
     }
