@@ -59,15 +59,6 @@ public class IndexingController {
         return ResponseDTO.response(indexService.deleteIndexById(domain, param));
     }
 
-//    @PatchMapping("/rank/{domain}/{orgId}/{keyCode}")
-//    public ResponseDTO<ResponseCode> updateRank(
-//            @PathVariable SEARCH_DOMAIN domain
-//            ,@PathVariable String orgId
-//            ,@PathVariable String keyCode
-//    ) {
-//        return ResponseDTO.response(indexService.updateRank(domain, orgId, keyCode));
-//    }
-
 
     @Tag(name = "색인 API", description = "색인 API")
     @PostMapping("/init")

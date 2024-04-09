@@ -8,8 +8,6 @@ import com.volka.searchengine.core.exception.BizException;
 import com.volka.searchengine.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.List;
 public class SearchServiceImpl implements SearchService {
 
     private final SearchEngine engine;
-    private final CacheManager cacheManager;
+//    private final CacheManager cacheManager;
 
     @Override
     public List<DocumentModel> searchWord(SEARCH_DOMAIN domain, String orgId, String word) {

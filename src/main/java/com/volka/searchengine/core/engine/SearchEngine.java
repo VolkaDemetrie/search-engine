@@ -3,7 +3,7 @@ package com.volka.searchengine.core.engine;
 import com.volka.searchengine.core.constant.ResponseCode;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.engine.model.DocumentModel;
-import com.volka.searchengine.core.engine.properties.Engine;
+import com.volka.searchengine.core.engine.properties.EngineProperties;
 import com.volka.searchengine.core.engine.strategy.TermStrategyContext;
 import com.volka.searchengine.core.engine.strategy.index.IndexStrategy;
 import com.volka.searchengine.core.exception.BizException;
@@ -42,7 +42,7 @@ public class SearchEngine {
 
 //    private final EngineProperties engineProperties;
 
-    private final Engine engine;
+    private final EngineProperties engineProperties;
 
 //    private final IndexWriterConfig koreanIndexWriterConfig; FIXME :: DO NOT SHARE
 
@@ -60,7 +60,7 @@ public class SearchEngine {
     }
 
     private void initPath() throws BizException, Exception {
-        Path basePath = engine.getIdxDir();
+        Path basePath = engineProperties.getIdxDir();
         if (!Files.exists(basePath)) {
             mkdirs(basePath);
         }
@@ -78,7 +78,7 @@ public class SearchEngine {
     }
 
     private Path generatePath(String orgId, SEARCH_DOMAIN domain) throws BizException, Exception {
-        return engine.getIdxDir().resolve(orgId.substring(16)).resolve(orgId).resolve(domain.toString());
+        return engineProperties.getIdxDir().resolve(orgId.substring(16)).resolve(orgId).resolve(domain.toString());
     }
 
 

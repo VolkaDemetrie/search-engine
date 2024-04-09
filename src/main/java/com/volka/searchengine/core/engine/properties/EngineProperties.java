@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author volka
  */
-public class Engine {
+public class EngineProperties {
     private Path idxDir;
 
     public Path getIdxDir() {
