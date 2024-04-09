@@ -1,6 +1,6 @@
 package com.volka.searchengine.core.validator;
 
-import com.volka.searchengine.core.annotation.Code;
+import com.volka.searchengine.core.annotation.validation.Code;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.volka.searchengine.core.annotation;
+package com.volka.searchengine.core.annotation.validation;
 
 import com.volka.searchengine.core.validator.YYYYValidator;
 import jakarta.validation.Constraint;

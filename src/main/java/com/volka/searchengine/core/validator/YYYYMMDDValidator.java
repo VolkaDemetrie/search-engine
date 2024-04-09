@@ -1,6 +1,6 @@
 package com.volka.searchengine.core.validator;
 
-import com.volka.searchengine.core.annotation.YYYYMMDD;
+import com.volka.searchengine.core.annotation.validation.YYYYMMDD;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -1,6 +1,6 @@
 package com.volka.searchengine.dto;
 
-import com.volka.searchengine.core.annotation.SysId;
+import com.volka.searchengine.core.annotation.validation.SysId;
 import com.volka.searchengine.core.engine.model.Acit;
 import com.volka.searchengine.core.engine.model.Trdp;
 import io.swagger.v3.oas.annotations.media.Schema;

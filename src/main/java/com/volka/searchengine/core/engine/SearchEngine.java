@@ -240,7 +240,7 @@ public class SearchEngine {
             switch (domain) {
                 case ACIT -> fieldId = "acitCd";
                 case TRDP -> fieldId = "trdpCd";
-                default -> throw new BizException("");
+                default -> throw new BizException("FL0002"); //정의되지 않은 도메인입니다.
             }
 
             for (String key : keyList) {

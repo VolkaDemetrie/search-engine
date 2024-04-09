@@ -1,6 +1,6 @@
 package com.volka.searchengine.core.validator;
 
-import com.volka.searchengine.core.annotation.YYYYMM;
+import com.volka.searchengine.core.annotation.validation.YYYYMM;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;

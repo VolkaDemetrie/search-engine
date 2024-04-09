@@ -1,7 +1,6 @@
 package com.volka.searchengine.core.engine.model;
 
-import com.volka.searchengine.core.annotation.Code;
-import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
+import com.volka.searchengine.core.annotation.validation.Code;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

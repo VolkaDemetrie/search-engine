@@ -1,6 +1,6 @@
 package com.volka.searchengine.domain.search.controller;
 
-import com.volka.searchengine.core.annotation.SysId;
+import com.volka.searchengine.core.annotation.validation.SysId;
 import com.volka.searchengine.core.constant.SEARCH_DOMAIN;
 import com.volka.searchengine.core.dto.ResponseDTO;
 import com.volka.searchengine.core.engine.model.DocumentModel;

@@ -1,11 +1,10 @@
-package com.volka.searchengine.core.annotation;
+package com.volka.searchengine.core.annotation.validation;
 
-import com.volka.searchengine.core.validator.YYYYMMDDValidator;
+import com.volka.searchengine.core.validator.YYYYMMValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
-
 
 /**
  * yyyyMMdd 년월일 체크 커스텀 어노테이션
@@ -13,12 +12,12 @@ import java.lang.annotation.*;
  * @author volka
  */
 @Documented
-@Constraint(validatedBy = YYYYMMDDValidator.class)
+@Constraint(validatedBy = YYYYMMValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface YYYYMMDD {
+public @interface YYYYMM {
 
-    String message() default "년월일 형식이 아닙니다.";
+    String message() default "년월 형식이 아닙니다.";
 
     Class<?>[] groups() default {};
 
