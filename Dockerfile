@@ -1,15 +1,12 @@
-FROM azul/zulu-openjdk-alpine:17.0.10-jdk AS builder
+FROM azul/zulu-openjdk-alpine:17.0.10-jdk
+ARG JAR_PATH=./build/libs
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
-RUN ./gradlew clean
-RUN ./gradlew bootRun
+RUN ./gradlew clean build
+COPY ${JAR_PATH}/*.jar ./app.jar
 
-FROM azul/zulu-openjdk-alpine:17.0.10-jdk
-COPY --from=builder build/libs/*.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "/app.jar"]
-VOLUME /tmp
+ENTRYPOINT ["java", "-jar", "app.jar"]
