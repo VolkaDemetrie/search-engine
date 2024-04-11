@@ -12,13 +12,14 @@ server:
     direct-buffers: true
 
 spring:
+  config:
+    activate:
+      on-profile: dev
   #  redis:
-  profiles:
-    active: dev
 
 
 engine:
-  idx-dir: "/home/volka/search_engine/idx"
+  idx-dir: "/home/volka/dev/file/search_engine/idx"
 
 springdoc:
   swagger-ui:

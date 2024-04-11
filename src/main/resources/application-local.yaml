@@ -12,9 +12,10 @@ server:
     direct-buffers: true
 
 spring:
-#  redis:
-  profiles:
-    active: local
+  config:
+    activate:
+      on-profile: local
+  #  redis:
 
 
 engine:
