@@ -11,6 +11,5 @@ RUN ./gradlew bootJar
 FROM azul/zulu-openjdk-alpine:17.0.10-jdk
 COPY --from=builder build/libs/*.jar app.jar
 
-
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 VOLUME /tmp
