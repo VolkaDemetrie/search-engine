@@ -6,7 +6,7 @@ COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean
-RUN ./gradlew bootJar
+RUN ./gradlew bootRun
 
 FROM azul/zulu-openjdk-alpine:17.0.10-jdk
 COPY --from=builder build/libs/*.jar app.jar
