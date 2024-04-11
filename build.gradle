@@ -3,16 +3,24 @@
  */
 
 plugins {
-    id 'java-library'
-    id 'maven-publish'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 repositories {
-    mavenLocal()
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
+    mavenCentral()
 }
+
+group = 'com.volka'
+version = '0.0.1-SNAPSHOT'
+description = 'search-engine'
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+jar {
+    enabled = false
+}
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux:3.2.2'
@@ -46,19 +54,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test:6.2.1'
     implementation 'com.opencsv:opencsv:4.1'
 }
-
-group = 'com.volka'
-version = '0.0.1-SNAPSHOT'
-description = 'search-engine'
-java.sourceCompatibility = JavaVersion.VERSION_17
-
-//publishing {
-//    publications {
-//        maven(MavenPublication) {
-//            from(components.java)
-//        }
-//    }
-//}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
