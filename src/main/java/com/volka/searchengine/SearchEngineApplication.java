@@ -18,7 +18,7 @@ public class SearchEngineApplication {
 
     @Bean
     @ConfigurationProperties(prefix = "engine")
-    EngineProperties createEngineProperty() {
+    EngineProperties engineProperties() {
         return new EngineProperties();
     }
 }
