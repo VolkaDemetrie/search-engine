@@ -60,8 +60,8 @@ public class SearchEngine {
     }
 
     private void initPath() throws BizException, Exception {
+        log.info("init index path :: {}", engineProperties.getIdxDir());
         Path basePath = engineProperties.getIdxDir();
-        log.info("init index path :: {}", basePath);
         if (!Files.exists(basePath)) {
             mkdirs(basePath);
         }
