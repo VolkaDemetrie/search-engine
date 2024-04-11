@@ -20,7 +20,9 @@ import org.apache.lucene.store.LockFactory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,7 +62,6 @@ public class SearchEngine {
     }
 
     private void initPath() throws BizException, Exception {
-        log.info("init index path :: {}", engineProperties.getIdxDir());
         Path basePath = engineProperties.getIdxDir();
         if (!Files.exists(basePath)) {
             mkdirs(basePath);
@@ -111,7 +112,7 @@ public class SearchEngine {
                 Directory indexDir = getIndexDir(domain, orgId);
                 IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig());
         ) {
-            validDuplicated(indexDir, indexStrategy);
+            if (indexDir.listAll().length > 0) validDuplicated(indexDir, indexStrategy);
             indexStrategy.addDocument(writer);
             writer.commit();
 
@@ -139,6 +140,7 @@ public class SearchEngine {
 
     private void validDuplicated(Directory indexDir, IndexStrategy indexStrategy) {
         try (IndexReader reader = DirectoryReader.open(indexDir);) {
+
             if (reader.numDocs() > 0) {
                 List<DocumentModel> duplicateList = indexStrategy.getDuplicateList(reader);
 
